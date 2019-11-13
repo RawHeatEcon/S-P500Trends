@@ -5,11 +5,25 @@ date: "11/12/2019"
 output: html_document
 ---
 
+
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+require("knitr")
+opts_knit$set(root.dir = "C:/Users/William Roche/Documents/GitHub/Git2/S-P500Trends/sandp500")
+#Need to make this a relative path so anyone can load the dataset easily
+
+library(tidyverse)
+library(dplyr)
+#Loading all necessary libraries
+
 ```
 
+
 ```{r}
+SP_data <- read.csv("all_stocks_5yr.csv")
+str(SP_data)
+head(SP_data)
 
 ```
 
