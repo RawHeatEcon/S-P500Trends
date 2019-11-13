@@ -2,7 +2,9 @@
 title: "Final Project"
 author: "Rohit Kumar & Channing Vernon"
 date: "11/12/2019"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 
@@ -19,12 +21,118 @@ library(dplyr)
 
 ```
 
+<br>
 
+# Loading Data + Cleaning
 ```{r}
-SP_data <- read.csv("all_stocks_5yr.csv")
-str(SP_data)
-head(SP_data)
+## Goals:
+# Cleaning up data, making it easier to read. 
+# **ALso need to filter out any NA's.**
+
+data <- read.csv("all_stocks_5yr.csv")
+
+summary(data)
+str(data)
+
+SP_data <- data %>%
+  select(Name,date,open,low,high,close, volume)
+# Changing the order of the columns
 
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+**Ommiting `NA` rows vs replacing them with `0`**
+```{r}
+SP_data <- na.omit(SP_data)
+#SP_data[is.na(SP_data)] <- 0
+
+# Omitting rows with NA values in order to make calculations error free, vs setting them to 0.
+
+summary(SP_data)
+```
+
+<br>
+# Changing date column from a factro to date
+```{r}
+# Making the "date" column usable.
+
+SP_data$Date <- as.Date(SP_data$date, format = "%Y-%m-%d")
+SP_data$date <- NULL
+# Changing the date column format into a new variable, and deleting the previous one
+
+summary(SP_data)
+
+```
+
+```{r, message = FALSE}
+## Goals
+# Figuring out how to categorize the data into 500 indiviual companies, manually or via
+# automation/funtion.
+
+SP_data %>%
+  group_by(Name) %>%
+  select(Name) %>%
+  unique()
+# Listing all of the unique companies included in data set.
+
+ABC <- ggplot(filter(SP_data, Name %in% c("ABC")), aes(x = Date, y = close)) + geom_point(alpha = (1/3), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "AmerisourceBergen Corp.",
+                        subtitle = "2013 to 2018",
+                        y = "Date",
+                        x = "Closing price (USD)")
+
+ABC
+
+AAL <- ggplot(filter(SP_data, Name %in% c("AAL")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "American Airlines",
+                        subtitle = "2013 to 2018",
+                        y = "Date",
+                        x = "Closing price (USD)")
+
+AAL
+
+AAL_ABC <- ggplot(filter(SP_data, Name %in% c("AAL","ABC")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "American Airlines & AmerisourceBergen Corp.",
+                        subtitle = "2013 to 2018",
+                        y = "Date",
+                        x = "Closing price (USD)")
+
+AAL_ABC
+
+
+
+
+
+
+#summary(SP_data)
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
