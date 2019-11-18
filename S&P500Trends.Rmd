@@ -105,10 +105,58 @@ AAL_ABC
 ```
 
 
+#Top 25 S&P 500 Stocks 
+```{r, message = FALSE}
+
+AMD <- ggplot(filter(SP_data, Name %in% c("AMD")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Advanced Micro Devices",
+                        subtitle = "2013 to 2018",
+                        y = "Date",
+                        x = "Closing price (USD)")
+
+AMD
 
 
+NVDA <- ggplot(filter(SP_data, Name %in% c("NVDA")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "InVidia",
+                        subtitle = "2013 to 2018",
+                        y = "Date",
+                        x = "Closing price (USD)")
+
+NVDA
 
 
+INTC <- ggplot(filter(SP_data, Name %in% c("INTC")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Intel",
+                        subtitle = "2013 to 2018",
+                        y = "Date",
+                        x = "Closing price (USD)")
+
+INTC
+
+
+AMZN <- ggplot(filter(SP_data, Name %in% c("AMZN")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Amazon",
+                        subtitle = "2013 to 2018",
+                        y = "Date",
+                        x = "Closing price (USD)")
+
+AMZN
+
+
+MSFT <- ggplot(filter(SP_data, Name %in% c("MSFT")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Microsoft",
+                        subtitle = "2013 to 2018",
+                        y = "Date",
+                        x = "Closing price (USD)")
+
+AMD
+
+
+TRIP <- ggplot(filter(SP_data, Name %in% c("TRIP")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Trip Advisor",
+                        subtitle = "2013 to 2018",
+                        y = "Date",
+                        x = "Closing price (USD)")
+
+TRIP
+
+
+```
 
 
 
