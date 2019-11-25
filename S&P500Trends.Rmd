@@ -21,6 +21,15 @@ library(dplyr)
 
 ```
 
+# Installing required packages and Libraries
+
+```{r}
+library(tidyverse)
+library(dplyr)
+```
+
+
+
 <br>
 
 # Loading Data + Cleaning
@@ -64,7 +73,7 @@ summary(SP_data)
 
 ```
 
-```{r, message = FALSE, include = FALSE, eval = FALSE}
+```{r, message = FALSE, include = TRUE, eval = FALSE}
 ## Goals
 # Figuring out how to categorize the data into 500 indiviual companies, manually or via
 # automation/funtion.
@@ -73,335 +82,31 @@ SP_data %>%
   group_by(Name) %>%
   select(Name) %>%
   unique()
-# Listing all of the unique companies included in data set.
-
-ABC <- ggplot(filter(SP_data, Name %in% c("ABC")), aes(x = Date, y = close)) + geom_point(alpha = (1/3), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "AmerisourceBergen Corp.",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-ABC
-
-AAL <- ggplot(filter(SP_data, Name %in% c("AAL")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "American Airlines",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-AAL
-
-AAL_ABC <- ggplot(filter(SP_data, Name %in% c("AAL","ABC")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "American Airlines & AmerisourceBergen Corp.",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-AAL_ABC
-
-
-
-
-
-
 #summary(SP_data)
 ```
 
 
 #Top S&P 500 Stocks 
-* Categorized by competitors and similar industries
-```{r, message = FALSE, include = FALSE, eval = FALSE}
 
-AMD <- ggplot(filter(SP_data, Name %in% c("AMD")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Advanced Micro Devices",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
+* S&P500 Sectors
+- Information Technology
+- Health Care
+- Financials
+- Communications Services
+- Industrials
+- Consumer Staples
+- Energy
+- Utilities
+- Real Estate
+- Materials
+- 
+- 
+- 
+- 
+- 
+- 
 
-AMD
 
-
-NVDA <- ggplot(filter(SP_data, Name %in% c("NVDA")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "InVidia",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-NVDA
-
-
-INTC <- ggplot(filter(SP_data, Name %in% c("INTC")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Intel",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-INTC
-
-```
-
-
-```{r, include = FALSE, eval = FALSE, message = FALSE}
-
-WMT <- ggplot(filter(SP_data, Name %in% c("WMT")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Walmart",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-WMT
-
-
-AMZN <- ggplot(filter(SP_data, Name %in% c("AMZN")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Amazon",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-AMZN
-
-
-MSFT <- ggplot(filter(SP_data, Name %in% c("MSFT")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Microsoft",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-MSFT
-
-
-AAPL <- ggplot(filter(SP_data, Name %in% c("AAPL")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Apple",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-AAPL
-
-```
-
-```{r, include = FALSE, eval = FALSE}
-TRIP <- ggplot(filter(SP_data, Name %in% c("TRIP")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Trip Advisor",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-TRIP
-
-
-AAP <- ggplot(filter(SP_data, Name %in% c("AAP")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Advance Auto Parts",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-AAP
-
-
-
-IBM <- ggplot(filter(SP_data, Name %in% c("IBM")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "IBM",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-IBM
-
-
-
-RHT <- ggplot(filter(SP_data, Name %in% c("RHT")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Red Hat ",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-RHT
-
-```
-
-
-```{r, message = FALSE, warning = FALSE, include = FALSE, eval = FALSE}
-
-MCD <- ggplot(filter(SP_data, Name %in% c("MCD")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Mcdonald's Corp.",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-MCD
-
-
-CMG <- ggplot(filter(SP_data, Name %in% c("CMG")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Chipotle Mexican Grill",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-CMG
-
-
-SBUX <- ggplot(filter(SP_data, Name %in% c("SBUX")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Starbucks",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-SBUX
-
-#WEN <- ggplot(filter(SP_data, Name %in% c("WEN")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + #geom_smooth(lwd = 1, se = TRUE) + labs(title = "Wendy's Co",
-#                        subtitle = "2013 to 2018",
-#                        y = "Date",
-#                        x = "Closing price (USD)")
-#
-#WEN
-
-#KEYS <- ggplot(filter(SP_data, Name %in% c("KEYS")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = #2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Keysight Technologies Inc",
-#                        subtitle = "2013 to 2018",
-#                        y = "Date",
-#                        x = "Closing price (USD)")
-#
-#KEYS
-
-
-ORLY<- ggplot(filter(SP_data, Name %in% c("ORLY")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "O'Reilly Automotive",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-ORLY
-
-
-FOX <- ggplot(filter(SP_data, Name %in% c("FOX")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Twentieth Century Fox",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-FOX
-
-
-DIS <- ggplot(filter(SP_data, Name %in% c("DIS")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Disney",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-DIS
-
-#HULU <- ggplot(filter(SP_data, Name %in% c("HULU")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = #2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "HULU",
-#                        subtitle = "2013 to 2018",
-#                        y = "Date",
-#                        x = "Closing price (USD)")
-#
-#HULU
-
-
-HCA <- ggplot(filter(SP_data, Name %in% c("HCA")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "HCA Healthcare",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-HCA
-
-
-BSX <- ggplot(filter(SP_data, Name %in% c("BSX")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Boston Scientific",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-BSX
-
-
-MKC <- ggplot(filter(SP_data, Name %in% c("MKC")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "McCormick & Co.",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-MKC
-
-
-ILMN <- ggplot(filter(SP_data, Name %in% c("ILMN")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Ilumina Inc.",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-ILMN
-
-
-NRG <- ggplot(filter(SP_data, Name %in% c("NRG")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "NRG Energy Co.",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-NRG
-
-
-LLY <- ggplot(filter(SP_data, Name %in% c("LLY")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Eli Lilly & Co.",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-LLY
-
-
-NFLX <- ggplot(filter(SP_data, Name %in% c("NFLX")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Netflix",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-NFLX
-
-
-EW <- ggplot(filter(SP_data, Name %in% c("EW")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Edwards Lifesciences",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-EW
-
-
-CRM <- ggplot(filter(SP_data, Name %in% c("CRM")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Salesforce.com",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-CRM
-
-
-AES <- ggplot(filter(SP_data, Name %in% c("AES")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "AES Corporation",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-AES
-
-
-RMD <- ggplot(filter(SP_data, Name %in% c("RMD")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "ResMed Inc.",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-RMD
-
-
-CHD <- ggplot(filter(SP_data, Name %in% c("CHD")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Church & Dwight Co.",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-CHD
-
-
-#LW <- ggplot(filter(SP_data, Name %in% c("LW")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + #geom_smooth(lwd = 1, se = TRUE) + labs(title = " Lamb Weston Holdings",
-#                        subtitle = "2013 to 2018",
-#                        y = "Date",
-#                        x = "Closing price (USD)")
-#
-#LW
-
-
-#VRNS <- ggplot(filter(SP_data, Name %in% c("VRNS")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Verisign",
-#                        subtitle = "2013 to 2018",
-#                        y = "Date",
-#                        x = "Closing price (USD)")
-
-#VRNS
-
-
-BRK.B <- ggplot(filter(SP_data, Name %in% c("BRK.B")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Berkshire Hathaway Inc.(B)",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-BRK.B
-
-
-```
-
-
-# S&P500 Sectors
 
 
 <br>
@@ -416,47 +121,7 @@ BRK.B
 `https://us.spindices.com/indices/equity/sp-500-information-technology-sector`
 
 
-```{r, include = FALSE, warning = FALSE, message = FALSE}
-CRM <- ggplot(filter(SP_data, Name %in% c("CRM")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Salesforce.com",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
 
-CRM
-
-
-MSFT <- ggplot(filter(SP_data, Name %in% c("MSFT")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Microsoft",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-MSFT
-
-
-CSCO <- ggplot(filter(SP_data, Name %in% c("CSCO")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Cisco Systems Inc.",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-CSCO
-
-
-V <- ggplot(filter(SP_data, Name %in% c("V")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Visa Inc A",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-V
-
-INTC <- ggplot(filter(SP_data, Name %in% c("INTC")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Intel Corp",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-INTC
-
-
-```
 
 ```{r, message = FALSE, warning = FALSE}
 SP_InfoTech <- ggplot(SP_data %>% filter(Name %in% c("CRM", "MSFT", "CSCO", "V", "INTC")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Top InfoTech Stocks", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name)
@@ -476,47 +141,7 @@ SP_InfoTech
 
 `https://us.spindices.com/indices/equity/sp-500-health-care-sector`
 
-```{r, include = FALSE, warning = FALSE, message = FALSE}
-JNJ <- ggplot(filter(SP_data, Name %in% c("JNJ")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Johnson & Johnson",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
 
-JNJ
-
-
-UNH <- ggplot(filter(SP_data, Name %in% c("UNH")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "UnitedHealth Group Inc.",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-UNH
-
-
-MRK <- ggplot(filter(SP_data, Name %in% c("MRK")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Merck & Co., Inc.",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-MRK
-
-
-ABT <- ggplot(filter(SP_data, Name %in% c("ABT")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Abbott Laboratories",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-ABT
-
-LLY <- ggplot(filter(SP_data, Name %in% c("LLY")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Eli Lilly And Co",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-LLY
-
-
-```
 
 ```{r, message = FALSE, warning = FALSE}
 SP_HealthCare <- ggplot(SP_data %>% filter(Name %in% c("JNJ", "UNH", "MRK", "ABT", "LLY")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Top HealthCare Stocks", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name)
@@ -536,50 +161,8 @@ SP_HealthCare
 
 `https://us.spindices.com/indices/equity/sp-500-financials-sector`
 
-```{r, include = FALSE, warning = FALSE, message = FALSE}
-BRK.B <- ggplot(filter(SP_data, Name %in% c("BRK.B")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Berkshire Hathaway Inc. Class B",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-BRK.B
-
-
-JPM <- ggplot(filter(SP_data, Name %in% c("UNH")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "JPMorgan Chase & Co.",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-JPM
-
-
-BAC <- ggplot(filter(SP_data, Name %in% c("BAC")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Bank of America Corp",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-BAC
-
-
-WFC <- ggplot(filter(SP_data, Name %in% c("WFC")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Wells Fargo & Co",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-WFC
-
-C <- ggplot(filter(SP_data, Name %in% c("LLY")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Citigroup Inc",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-C
-
-
-```
-
 ```{r, message = FALSE, warning = FALSE}
-SP_Financials <- ggplot(SP_data %>% filter(Name %in% c("BRK.B", "WFC", "JPM", "BAC", "C")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Top Financials Stocks", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name)
+SP_Financials <- ggplot(SP_data %>% filter(Name %in% c("BRK.B", "JPM", "BAC", "WFC", "C")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Top Financials Stocks", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name)
   
 SP_Financials
 ```
@@ -587,7 +170,6 @@ SP_Financials
 <br>
 
 **Consumer Discretionary - 9.9%**
-
 * AMZN
 * HD
 * MCD
@@ -596,53 +178,17 @@ SP_Financials
 
 `https://us.spindices.com/indices/equity/sp-500-consumer-discretionary-sector`
 
-```{r, include = FALSE, warning = FALSE, message = FALSE}
-AMZN <- ggplot(filter(SP_data, Name %in% c("AMZN")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Amazon.com, Inc.",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-AMZN
-
-
-HD <- ggplot(filter(SP_data, Name %in% c("HD")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Home Depot Inc.",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-HD
-
-
-MCD <- ggplot(filter(SP_data, Name %in% c("MCD")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Mcdonald's Corp",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-MCD
-
-
-NKE <- ggplot(filter(SP_data, Name %in% c("NKE")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Nike Inc",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-NKE
-
-SBUX <- ggplot(filter(SP_data, Name %in% c("SBUX")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Starbucks Corporation",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-SBUX
-
-
-```
 
 ```{r, message = FALSE, warning = FALSE}
-SP_ConsumerDisc <- ggplot(SP_data %>% filter(Name %in% c("AMZN", "HD", "MCD", "NKE", "SBUX")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Top Consumer Discretionary Stocks", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name)
+SP_ConsumerDisc <- ggplot(SP_data %>% filter(Name %in% c("HD", "MCD", "NKE", "SBUX")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Top Consumer Discretionary Stocks", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name)
   
 SP_ConsumerDisc
 ```
+
+```{r}
+"AMZN"
+```
+
 
 <br>
 
@@ -656,47 +202,6 @@ SP_ConsumerDisc
 
 `https://us.spdrs.com/en/etf/the-communication-services-select-sector-spdr-fund-XLC`
 
-```{r, include = FALSE, warning = FALSE, message = FALSE}
-FB <- ggplot(filter(SP_data, Name %in% c("FB")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Facebook, Inc. Common Stock",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-FB
-
-
-GOOGL <- ggplot(filter(SP_data, Name %in% c("GOOGL")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Alphabet Inc. Class A",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-GOOGL
-
-
-CHTR <- ggplot(filter(SP_data, Name %in% c("CHTR")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Charter Communications Inc",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-CHTR
-
-
-DIS <- ggplot(filter(SP_data, Name %in% c("DIS")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Walt Disney Co",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-DIS
-
-NFLX <- ggplot(filter(SP_data, Name %in% c("NFLX")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Netflix",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-NFLX
-
-
-```
 
 ```{r, message = FALSE, warning = FALSE}
 SP_CommServices <- ggplot(SP_data %>% filter(Name %in% c("FB", "GOOGL", "CHTR", "DIS", "NFLX")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Top Communication Services Stocks", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name)
@@ -716,47 +221,6 @@ SP_CommServices
 
 `https://us.spindices.com/indices/equity/sp-500-industrials-sector`
 
-```{r, include = FALSE, warning = FALSE, message = FALSE}
-BA <- ggplot(filter(SP_data, Name %in% c("BA")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Boeing Co",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-BA
-
-
-HON <- ggplot(filter(SP_data, Name %in% c("HON")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Honeywell International Inc.",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-HON
-
-
-UNP <- ggplot(filter(SP_data, Name %in% c("UNP")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Union Pacific Corporation",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-UNP
-
-
-UTX <- ggplot(filter(SP_data, Name %in% c("UTX")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "United Technologies Corporation",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-UTX
-
-MMM <- ggplot(filter(SP_data, Name %in% c("MMM")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "3M Co.",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-MMM
-
-
-```
 
 ```{r, message = FALSE, warning = FALSE}
 SP_Industrials <- ggplot(SP_data %>% filter(Name %in% c("BA", "HON", "UNP", "UTX", "MMM")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Top Industrials Stocks", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name)
@@ -764,59 +228,6 @@ SP_Industrials <- ggplot(SP_data %>% filter(Name %in% c("BA", "HON", "UNP", "UTX
 SP_Industrials
 ```
 
-<br>
-
-**Consumer Staples - 7.4%**
-
-* WMT
-* PG
-* KO
-* PEP
-* PM, COST, MO
-
-`https://www.fool.com/investing/the-10-biggest-consumer-staples-stocks.aspx`
-
-```{r, include = FALSE, warning = FALSE, message = FALSE}
-WMT <- ggplot(filter(SP_data, Name %in% c("JNJ")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Walmart Inc",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-WMT
-
-
-PG <- ggplot(filter(SP_data, Name %in% c("PG")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Procter & Gamble Co",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-PG
-
-
-KO <- ggplot(filter(SP_data, Name %in% c("KO")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Coca-Cola Co",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-KO
-
-
-PEP <- ggplot(filter(SP_data, Name %in% c("PEP")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "PepsiCo, Inc.",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-PEP
-
-PM <- ggplot(filter(SP_data, Name %in% c("PM")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Philip Morris International Inc.",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-PM
-
-
-```
 
 ```{r, message = FALSE, warning = FALSE}
 SP_ConsumerStaples <- ggplot(SP_data %>% filter(Name %in% c("PM", "PEP", "KO", "PG", "WMT")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Top Consumer Staples Stocks", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name)
@@ -840,47 +251,6 @@ SP_ConsumerStaples
 
 `https://www.fool.com/investing/2018/09/06/the-5-biggest-oil-stocks-in-the-us.aspx`
 
-```{r, include = FALSE, warning = FALSE, message = FALSE}
-XOM <- ggplot(filter(SP_data, Name %in% c("XOM")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Exxon Mobil Corporation",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-XOM
-
-
-CVX <- ggplot(filter(SP_data, Name %in% c("CVX")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Chevron Corporation",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-CVX
-
-
-COP <- ggplot(filter(SP_data, Name %in% c("COP")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "ConocoPhillips",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-COP
-
-
-EOG <- ggplot(filter(SP_data, Name %in% c("EOG")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "EOG Resources Inc",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-EOG
-
-NEE <- ggplot(filter(SP_data, Name %in% c("NEE")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "NextEra Energy Inc",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-NEE
-
-
-```
 
 ```{r, message = FALSE, warning = FALSE}
 SP_Energy <- ggplot(SP_data %>% filter(Name %in% c("EOG", "COP", "NEE", "XOM", "CVX")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Top Energy Stocks", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name)
@@ -900,50 +270,9 @@ SP_Energy
 
 `https://www.barrons.com/articles/you-may-be-surprised-which-stock-market-sector-has-been-the-hottest-in-the-past-year-51570273500`
 
-```{r, include = FALSE, warning = FALSE, message = FALSE}
-PPL <- ggplot(filter(SP_data, Name %in% c("PPL")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "PPL Corp",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-PPL
-
-
-D <- ggplot(filter(SP_data, Name %in% c("D")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Dominion Energy Inc",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-D
-
-
-SO <- ggplot(filter(SP_data, Name %in% c("SO")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Southern Co",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-SO
-
-
-DUK <- ggplot(filter(SP_data, Name %in% c("DUK")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Duke Energy Corp",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-DUK
-
-AES <- ggplot(filter(SP_data, Name %in% c("AES")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "AES Corp",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-AES
-
-
-```
 
 ```{r, message = FALSE, warning = FALSE}
-SP_Utilities <- ggplot(SP_data %>% filter(Name %in% c("PPL", "D", "DUK", "SO", "AES")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Microsoft", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name)
+SP_Utilities <- ggplot(SP_data %>% filter(Name %in% c("PPL", "D", "DUK", "SO", "AES")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Top Utilities Stocks", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name)
   
 SP_Utilities
 ```
@@ -965,50 +294,8 @@ SP_Utilities
 `https://www.investopedia.com/top-real-estate-stocks-4582128`
 
 
-```{r, include = FALSE, warning = FALSE, message = FALSE}
-JNJ <- ggplot(filter(SP_data, Name %in% c("JNJ")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Johnson & Johnson",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-JNJ
-
-
-UNH <- ggplot(filter(SP_data, Name %in% c("UNH")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "UnitedHealth Group Inc.",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-UNH
-
-
-MRK <- ggplot(filter(SP_data, Name %in% c("MRK")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Merck & Co., Inc.",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-MRK
-
-
-ABT <- ggplot(filter(SP_data, Name %in% c("ABT")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Abbott Laboratories",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-ABT
-
-LLY <- ggplot(filter(SP_data, Name %in% c("LLY")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Eli Lilly And Co",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-LLY
-
-
-```
-
 ```{r, message = FALSE, warning = FALSE}
-SP_RealEstate <- ggplot(SP_data %>% filter(Name %in% c("CRM", "MFST", "CSCO", "V", "INTC")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Microsoft", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name)
+SP_RealEstate <- ggplot(SP_data %>% filter(Name %in% c("CCI", "PLD", "AMT", "VNO", "MAC")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Top Real Estate Stocks", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name)
   
 SP_RealEstate
 ```
@@ -1025,53 +312,13 @@ SP_RealEstate
 
 `https://www.investopedia.com/top-materials-stocks-4582152`
 
-```{r, include = FALSE, warning = FALSE, message = FALSE}
-JNJ <- ggplot(filter(SP_data, Name %in% c("JNJ")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Johnson & Johnson",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-JNJ
-
-
-UNH <- ggplot(filter(SP_data, Name %in% c("UNH")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "UnitedHealth Group Inc.",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-UNH
-
-
-MRK <- ggplot(filter(SP_data, Name %in% c("MRK")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Merck & Co., Inc.",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-MRK
-
-
-ABT <- ggplot(filter(SP_data, Name %in% c("ABT")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Abbott Laboratories",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-ABT
-
-LLY <- ggplot(filter(SP_data, Name %in% c("LLY")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Eli Lilly And Co",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)")
-
-LLY
-
-
-```
-
 ```{r, message = FALSE, warning = FALSE}
-SP_Materials <- ggplot(SP_data %>% filter(Name %in% c("CRM", "MFST", "CSCO", "V", "INTC")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Microsoft", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name)
+SP_Materials <- ggplot(SP_data %>% filter(Name %in% c("NUE", "LYB", "ALB", "NEM", "CF")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Top Materials Stocks", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name)
   
 SP_Materials
 ```
+
+<br>
 
 ```{r, message = FALSE, warning = FALSE, error = FALSE}
 
@@ -1094,6 +341,69 @@ AMD_NVDA_INTC_ <- ggplot(filter(SP_data, Name %in% c("INTC", "AMD","NVDA")), aes
 
 AMD_NVDA_INTC_
 ```
+
+
+
+# Questions
+
+
+* 1. Which stock has the highest gains from 2013- 2018?
+
+* 2. Which has the lowest?
+
+* 3. Finding the p value with a t test and the null hypothesis.
+
+* 4. Finding a way to implement the stocks with a confidence interval.
+
+* 5. Compare the top companies.
+
+* 6. Events that affected the stock market from 2013 - 2018.
+
+* 7. Most popular stock?
+
+* 8. Least popular stock?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
