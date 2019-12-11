@@ -1,92 +1,124 @@
 ---
-title: "Final Project"
+title: "A glimpse into the ups & downs of the S&P 500"
 author: "Rohit Kumar & Channing Vernon"
 date: "11/12/2019"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 ---
 
-
+> <u>**Introduction**</u>
 
 ```{r setup, include = FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 require("knitr")
 opts_knit$set(root.dir = "C:/Users/William Roche/Documents/GitHub/Git2/S-P500Trends/sandp500")
-#Need to make this a relative path so anyone can load the dataset easily
+# Setting working directory for the project
 
 library(tidyverse)
 library(dplyr)
-#Loading all necessary libraries
+# Loading all necessary libraries
 
 ```
 
-# Installing required packages and Libraries
 
+Have you wondered about how the stock market can have a positive or negative impact on our society as a whole? The stock market signifies the change in unemployment, interest rates, and economic growth. With that being said Rohit and Channing realize similarities and compare events that occur around the world from years 2013 - 2018 and how they impact stock prices and the market as a whole. We also look at how the market rises and falls with respect to itself, and if there is is a sole, major driving power that determines a change for most of the stock exchange in the S & P 500 index.  
+
+In order to address the problems at hand, we choose to use a data set found on
+[Kaggle](https://www.Kaggle.com). Here we looked at a couple of situations that might have impacted the S&P 500 index, using summary statistics to show light on the general picture of what we are working with and then moving on to more robust analysis via hypothesis testing using t-tests. 
+
+To approach the problem we first use simple yet powerful graphing techniques to show the spread of the data. This will easily show the changes that have occurred over the 5-year span. With the help of text accompanying these graphs we can further emphasize what is truly going on here.
+
+
+<br>
+
+# Installing packages required
 ```{r}
 library(tidyverse)
 library(dplyr)
-```
 
+## We first use the "tidyverse" package which contains a variety of packages that help us show data through graphs and plots using "ggplot" & "tibble". Also, we can manipulate data using powerful piping techniques to narrow down our queries via "dplyr". This also segways into the fact that we have also manually installed and loaded the "dplyr" package as a fail-safe.
+```
 
 
 <br>
 
 # Loading Data + Cleaning
+
+
+*The data set was found from the following link on Kaggle:*
+[Source](https://www.kaggle.com/camnugent/sandp500)
+
+<br>
+
+The data was collected by Dr. Cam Nugent, Ph.D. Candidate, Bioinformatics at University of Guelph, 
+Guelph, Ontario, Canada. He collected the data via a script that acquired `.csv` files of specified stock tickers which all together form the S&P 500 index. The script which was used can be found in 
+[this GitHub repository](https://github.com/CNuge/kaggle-code). The data was last updated/collected in February 2018. The script simply compiled data from the past 5 years at that point and compartmentalized the individual stocks with their respective observations. One peculiarity of the data was that as the S&P 500 index changed over time, some stocks were removed from the set in order to show a more true picture. This results in missing values throughout the data set which need to be fixed.
+
+We simply downloaded the data from Kaggle into a new folder and imported the data into RStudio straight from there. Then we ran a couple of summary statistics to see exactly what we are working with. We notice a lot of `NA's` included in some variables, and that the date is not formatted correctly. In the str table we can notice that the date variable is a factor variable instead of a date.
+
+
 ```{r}
-## Goals:
-# Cleaning up data, making it easier to read. 
-# **ALso need to filter out any NA's.**
+data <- read.csv("all_stocks_5yr.csv") # Loading the dataset
 
-data <- read.csv("all_stocks_5yr.csv")
-
-summary(data)
-str(data)
+summary(data) # Showing basic summary statistics
+str(data) # Showing more information about the variables
 
 SP_data <- data %>%
   select(Name,date,open,low,high,close, volume)
-# Changing the order of the columns
+# Changing the order of the columns for aesthetic purposes
 
 ```
-
+<br>
 
 **Ommiting `NA` rows vs replacing them with `0`**
-```{r}
-SP_data <- na.omit(SP_data)
-#SP_data[is.na(SP_data)] <- 0
 
-# Omitting rows with NA values in order to make calculations error free, vs setting them to 0.
+
+We choose to omit rows with `NA` values in order to make calculations error-free, vs setting them to 0.
+
+```{r, eval = FALSE}
+SP_data <- na.omit(SP_data) # Omitting all rows with NA values
+
+## SP_data[is.na(SP_data)] <- 0 
+
+# Example of what setting NA values to 0 looks like
 
 summary(SP_data)
 ```
 
 <br>
-# Changing date column from a factro to date
+
+# Changing date column from a factor to date
+
+Next, we make a new `Date` column and format the date column into Y-M-D, making it a more workable and usable column. After we have created this new `Date` column we delete the previous one. 
+
 ```{r}
-# Making the "date" column usable.
+SP_data$Date <- as.Date(SP_data$date, format = "%Y-%m-%d") 
+# Selecting date variable and changing it into the date format
 
-SP_data$Date <- as.Date(SP_data$date, format = "%Y-%m-%d")
-SP_data$date <- NULL
-# Changing the date column format into a new variable, and deleting the previous one
-
-summary(SP_data)
-
-```
-
-```{r, message = FALSE, include = TRUE, eval = FALSE}
-## Goals
-# Figuring out how to categorize the data into 500 indiviual companies, manually or via
-# automation/funtion.
+SP_data$date <- NULL # Deleting original date column
 
 SP_data %>%
-  group_by(Name) %>%
-  select(Name) %>%
-  unique()
-#summary(SP_data)
+  select(Name, close, volume, Date) %>% # Selecting 3 useful variables and a name column
+  head(5) # Returning the first 5 rows
 ```
+Above we can see the first 5 rows of the data set showing the three main variables we will be looking closely at; close (price), volume (stocks bought/sold) and the date.
+<br>
+
+* `close`
+  + The closing price will provide us with exactly where the respective stock's value lies at the end of the day.
+
+* `volume`
+  + The volume represents how much of the stock changed hands, via buying and selling.
+
+* `Date`
+  + The date will show us exactly what point in time the stock was reacting to change(s).
 
 
-#Top S&P 500 Stocks 
+
+# Top S&P 500 Stocks 
+
+The S&P 500 index is composed of 10 different sectors in different industries, with Information Technology sitting with the highest perccentage. The top 5 best performing stocks among the respective sectors are compared below with the source linked at the bottom.
 
 * S&P500 Sectors
 - Information Technology
@@ -99,14 +131,8 @@ SP_data %>%
 - Utilities
 - Real Estate
 - Materials
-- 
-- 
-- 
-- 
-- 
-- 
 
-
+*We take a quick look at these sectors in more detail*
 
 
 <br>
@@ -118,16 +144,17 @@ SP_data %>%
 * V
 * INTC
 
-`https://us.spindices.com/indices/equity/sp-500-information-technology-sector`
+[Source](https://us.spindices.com/indices/equity/sp-500-information-technology-sector)
 
 
-
-
-```{r, message = FALSE, warning = FALSE}
+```{r, message = FALSE, warning = FALSE, echo = FALSE}
 SP_InfoTech <- ggplot(SP_data %>% filter(Name %in% c("CRM", "MSFT", "CSCO", "V", "INTC")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Top InfoTech Stocks", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name)
-  
+# Plotting the top stocks into easily readable graphs side by side  
 SP_InfoTech
 ```
+
+The top information technology stocks showed overall positive gains, with Salesforce (CRM) showing interesting dips with a respectable recovery. Cisco and Intel showed slow but sure improvement over the 5-year span. Visa and Microsoft, on the other hand, showed very steady positive growth. Compared together these top stocks seem to have a mind of their own when it comes to rising in gains or lowering.
+
 
 <br>
 
@@ -139,15 +166,19 @@ SP_InfoTech
 * ABT
 * LLY
 
-`https://us.spindices.com/indices/equity/sp-500-health-care-sector`
+[Source](https://us.spindices.com/indices/equity/sp-500-health-care-sector)
 
 
 
-```{r, message = FALSE, warning = FALSE}
+```{r, message = FALSE, warning = FALSE, echo = FALSE}
 SP_HealthCare <- ggplot(SP_data %>% filter(Name %in% c("JNJ", "UNH", "MRK", "ABT", "LLY")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Top HealthCare Stocks", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name)
-  
+# Plotting the top stocks into easily readable graphs side by side  
 SP_HealthCare
 ```
+
+Although the top stocks in health care show near break-even gains, it is interesting to note UnitedHealth Group Inc's amazing performance. In 2014, former President Obama had signed to add $20 million in healthcare through his "Obamacare". However, by looking at the stocks, there seems to be little to no effect in the year 2014 to the outside influence of "Obamacare".
+
+
 
 <br>
 
@@ -159,35 +190,45 @@ SP_HealthCare
 * WFC
 * C
 
-`https://us.spindices.com/indices/equity/sp-500-financials-sector`
+[Source](https://us.spindices.com/indices/equity/sp-500-financials-sector)
 
-```{r, message = FALSE, warning = FALSE}
+```{r, message = FALSE, warning = FALSE, echo = FALSE}
 SP_Financials <- ggplot(SP_data %>% filter(Name %in% c("BRK.B", "JPM", "BAC", "WFC", "C")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Top Financials Stocks", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name)
-  
+# Plotting the top stocks into easily readable graphs side by side  
 SP_Financials
 ```
+
+Among the top financials stocks, Warren Buffet's Berkshire Hathaway Inc. has seen some great gains. The rest of the leading financials stocks come in at very low gains compared to BRK.B. These stocks seem to have low gains except for BRK.B, but do so with no relation to one another. 
+
 
 <br>
 
 **Consumer Discretionary - 9.9%**
+
 * AMZN
 * HD
 * MCD
 * NKE
 * SBUX
 
-`https://us.spindices.com/indices/equity/sp-500-consumer-discretionary-sector`
+[Source](https://us.spindices.com/indices/equity/sp-500-consumer-discretionary-sector)
 
 
-```{r, message = FALSE, warning = FALSE}
+```{r, message = FALSE, warning = FALSE, echo = FALSE}
 SP_ConsumerDisc <- ggplot(SP_data %>% filter(Name %in% c("HD", "MCD", "NKE", "SBUX")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Top Consumer Discretionary Stocks", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name)
-  
+# Plotting the top stocks into easily readable graphs side by side  
 SP_ConsumerDisc
 ```
 
-```{r}
-"AMZN"
+After taking out Amazon (below) out of the picture, for solely blowing every other stock out. Amazon displays extremely explosive growth and continues to do so, which, when comparing to the other throws off the data tremendously. Home depot and Mcdonalds show decent gains, whereas Nike and Starbucks seem to struggle during these years. All in all, there doesn't seem to be a clear force driving all of these stocks up or down.
+
+```{r, message = FALSE, warning = FALSE, echo = FALSE, echo = FALSE}
+Amazon <- ggplot(SP_data %>% filter(Name %in% c("AMZN")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Amazon", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)")
+# Plotting Amazon stock onto a graph  
+Amazon
 ```
+
+
 
 
 <br>
@@ -200,14 +241,16 @@ SP_ConsumerDisc
 * Walt Disney
 * NFLX, AT&T, Verizon, comcast, activision
 
-`https://us.spdrs.com/en/etf/the-communication-services-select-sector-spdr-fund-XLC`
+[Source](https://us.spdrs.com/en/etf/the-communication-services-select-sector-spdr-fund-XLC)
 
 
-```{r, message = FALSE, warning = FALSE}
+```{r, message = FALSE, warning = FALSE, echo = FALSE}
 SP_CommServices <- ggplot(SP_data %>% filter(Name %in% c("FB", "GOOGL", "CHTR", "DIS", "NFLX")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Top Communication Services Stocks", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name)
-  
+# Plotting the top stocks into easily readable graphs side by side  
 SP_CommServices
 ```
+
+The above graphs show the dominance Google has over its competitors in the telecommunications sector of the S&P 500. With every other stock making minimal gains Google shows skyrocketing growth. This can especially be seen around mid-2015 where Google seems to just take off. Once again there doesn't seem to be any major influence from outside that runs synonymous with all the stocks.
 
 <br>
 
@@ -219,21 +262,38 @@ SP_CommServices
 * UTX
 * MMM, LMT, GE
 
-`https://us.spindices.com/indices/equity/sp-500-industrials-sector`
+[Source](https://us.spindices.com/indices/equity/sp-500-industrials-sector)
 
 
-```{r, message = FALSE, warning = FALSE}
+```{r, message = FALSE, warning = FALSE, echo = FALSE}
 SP_Industrials <- ggplot(SP_data %>% filter(Name %in% c("BA", "HON", "UNP", "UTX", "MMM")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Top Industrials Stocks", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name)
-  
+# Plotting the top stocks into easily readable graphs side by side  
 SP_Industrials
 ```
 
+Once again, we can see that most of the stocks at the top of the industrials sector have average growth, there are two outliers almost on opposite spectrums. Boeing Co has seen unimaginable growth from 2017 and up, where if we glance at the Union Pacific Corporation there stock dipped horribly but recovered. With these volatile movements in mind compared to the average growth of the other stocks we can see a sort of pattern developing within all of the data. There isn't much outside influence that we can see driving the stock market, rather internal successes and failures within companies that may cause change to the stock.
 
-```{r, message = FALSE, warning = FALSE}
+
+<br>
+
+**Consumer Staples - 7.4%**
+
+* PM
+* PEP
+* KO
+* PG
+* WMT
+
+[SOURCE](https://www.fool.com/investing/the-10-biggest-consumer-staples-stocks.aspx)
+
+
+```{r, message = FALSE, warning = FALSE, echo = FALSE}
 SP_ConsumerStaples <- ggplot(SP_data %>% filter(Name %in% c("PM", "PEP", "KO", "PG", "WMT")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Top Consumer Staples Stocks", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name)
-  
+# Plotting the top stocks into easily readable graphs side by side  
 SP_ConsumerStaples
 ```
+
+The top consumer staples stocks paint a completely different picture. The gains are all over the place and the stocks dip and rise as if on random cue. However, through all of the confusion, it slowly becomes clear that around the 2016 year mark, the time proved to be a turning point, good or bad. Around this time one can see noticeable changes in the direction of all the stocks. This may indicate an outside force affecting the market. 
 
 <br>
 
@@ -245,18 +305,20 @@ SP_ConsumerStaples
 * TOT
 * BP, PTR, NEE
 
-`https://www.fool.com/investing/the-10-biggest-energy-stocks.aspx`
+[SOURCE 1](https://www.fool.com/investing/the-10-biggest-energy-stocks.aspx)
 
 &
 
-`https://www.fool.com/investing/2018/09/06/the-5-biggest-oil-stocks-in-the-us.aspx`
+[SOURCE 2](https://www.fool.com/investing/2018/09/06/the-5-biggest-oil-stocks-in-the-us.aspx)
 
 
-```{r, message = FALSE, warning = FALSE}
+```{r, message = FALSE, warning = FALSE, echo = FALSE}
 SP_Energy <- ggplot(SP_data %>% filter(Name %in% c("EOG", "COP", "NEE", "XOM", "CVX")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Top Energy Stocks", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name)
-  
+# Plotting the top stocks into easily readable graphs side by side  
 SP_Energy
 ```
+
+Here we can see the energy sector acts quite erratically. Most of these top companies deal with the production and exploration of hydrocarbons. Looking at these statistics really tells us nothing concrete, each company seems to come out positive or just about even in the long run. There is no way in telling if any outside entity influenced these stocks.
 
 <br>
 
@@ -268,14 +330,16 @@ SP_Energy
 * DUK
 * CNNP, AES, EIX, FE, ED
 
-`https://www.barrons.com/articles/you-may-be-surprised-which-stock-market-sector-has-been-the-hottest-in-the-past-year-51570273500`
+[SOURCE](https://www.barrons.com/articles/you-may-be-surprised-which-stock-market-sector-has-been-the-hottest-in-the-past-year-51570273500)
 
 
-```{r, message = FALSE, warning = FALSE}
+```{r, message = FALSE, warning = FALSE, echo = FALSE}
 SP_Utilities <- ggplot(SP_data %>% filter(Name %in% c("PPL", "D", "DUK", "SO", "AES")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Top Utilities Stocks", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name)
-  
+# Plotting the top stocks into easily readable graphs side by side  
 SP_Utilities
 ```
+
+Surprisingly, utilities stocks seem unfazed from anything happening around them. They show minimal but positive growth amidst many world events happening all the time. From hurricane Harvey in August of 2017 to the Trans-Pacific partnership in February of 2015, not much can sway these stocks from their course.
 
 <br>
 
@@ -287,19 +351,24 @@ SP_Utilities
 * VNO
 * HST, CBRE, WELL, PLD, CCI
 
-`https://www.fool.com/investing/2019/01/13/the-3-best-real-estate-stocks-to-buy-in-2019.aspx`
+[SOURCE 1](https://www.fool.com/investing/2019/01/13/the-3-best-real-estate-stocks-to-buy-in-2019.aspx)
 
 &
 
-`https://www.investopedia.com/top-real-estate-stocks-4582128`
+[SOURCE 2](https://www.investopedia.com/top-real-estate-stocks-4582128)
 
 
-```{r, message = FALSE, warning = FALSE}
+```{r, message = FALSE, warning = FALSE, echo = FALSE}
 SP_RealEstate <- ggplot(SP_data %>% filter(Name %in% c("CCI", "PLD", "AMT", "VNO", "MAC")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Top Real Estate Stocks", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name)
-  
+# Plotting the top stocks into easily readable graphs side by side  
 SP_RealEstate
 ```
 
+With interest rates on the rise, as seen below, we can see somewhat of an increase in gains, but there are till stocks that are lagging behind and even going negative. Once, again we cannot say for certain how these outside events are impacting the course of the market.
+
+
+![Alt text](C:/Users/William Roche/Downloads/fed-funds-rate-historical-chart-2019-12-10-macrotrends.png)
+<a href='https://www.macrotrends.net/2015/fed-funds-rate-historical-chart'>Macrotrends</a>
 <br>
 
 **Materials - 2.6%**
@@ -310,17 +379,19 @@ SP_RealEstate
 * NEM
 * CF, FMC, 
 
-`https://www.investopedia.com/top-materials-stocks-4582152`
+[SOURCE](https://www.investopedia.com/top-materials-stocks-4582152)
 
-```{r, message = FALSE, warning = FALSE}
+```{r, message = FALSE, warning = FALSE, echo = FALSE}
 SP_Materials <- ggplot(SP_data %>% filter(Name %in% c("NUE", "LYB", "ALB", "NEM", "CF")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Top Materials Stocks", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name)
-  
+# Plotting the top stocks into easily readable graphs side by side  
 SP_Materials
 ```
 
+Here, the top materials stocks shown the same sort of trends as seen previously, which was no trend at all! Although the stocks do seem to be positive as growth goes, there is still much to question about outside forces interacting with the future of the sector.
+
 <br>
 
-```{r, message = FALSE, warning = FALSE, error = FALSE}
+```{r, message = FALSE, warning = FALSE, error = FALSE, echo = FALSE}
 
 AMD_NVDA_INTC <- ggplot(filter(SP_data, Name %in% c("INTC", "AMD","NVDA")), aes(x = Date, y = close, color = Name)) + geom_point(alpha = 0, size = 1) + geom_smooth() + labs(title = "Intel vs AMD vs InVidia",
                         subtitle = "2013 to 2018",
@@ -331,82 +402,145 @@ AMD_NVDA_INTC
 ```
 
 
-
+This graph shows that in the year 2016 Nvidia's stock tripled by years end. Compared to the other similar stocks in its sector, Nvidia exponentially increased its value. This is mainly because of the release of its Pascal line of graphics cards at the beginning of the pc gaming revolution.
+[SOURCE](https://www.fool.com/investing/2017/01/03/why-nvidia-stock-tripled-in-2016.aspx) This also shows that even though a stock has explosive growth in a single sector, accompanying stocks do not rise or drop as a result.
 <br>
-```{r, messages = FALSE, warnings = FALSE}
-AMD_NVDA_INTC_ <- ggplot(filter(SP_data, Name %in% c("INTC", "AMD","NVDA")), aes(x = Date, y = close, color = Name)) + geom_point() + labs(title = "Intel vs AMD vs InVidia",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)") + theme_dark()
 
-AMD_NVDA_INTC_
+
+# Delving Deeper into the Data
+
+
+>**Interesting Q&A**
+
+
+* 1. Which stock has the highest gains from 2013 - 2018?
+
+```{r, warning=FALSE, message=FALSE, echo = FALSE}
+
+Top <-SP_data %>%
+ group_by(Name)%>% # Grouping data by stock name
+ arrange(Name, Date) %>% # Reordering each stock from earliest date to present day
+ filter(row_number()==1 | row_number()==n()) %>% # Showing only first entry and last entry of each stock
+ mutate(Gains = c(0,diff(close))) %>% # Finding difference of first and last entry to find 5 year gain
+ filter(Gains != "NULL" & Gains!=0) %>% # Omitting rows with 0
+ arrange(desc(Gains)) %>% # Reordering data by highest gains
+ select(Name, Gains) %>% # Selecting Name and gain columns only
+ head(1) # Showing first entry
+
+Top
+
+```
+**Booking Holdings Inc**
+<br>
+
+* 2. Which has the lowest gains from 2013 - 2018?
+
+```{r, warning=FALSE, message=FALSE, echo = FALSE}
+
+Bottom <-SP_data %>%
+ group_by(Name) %>% # Grouping data by stock name
+ arrange(Name, Date) %>% # Reordering each stock from earliest date to present day
+ filter(row_number()==1 | row_number()==n()) %>% # Showing only first entry and last entry of each stock
+ mutate(Gains = c(0,diff(close))) %>% # Finding difference of first and last entry to find 5 year gain
+ filter(Gains != "NULL" & Gains!=0) %>% # Omitting rows with 0
+ arrange(Gains) %>% # Reordering data by lowest gains
+ select(Name, Gains) %>% # Selecting Name and gain columns only
+ head(1) # Showing first entry
+
+Bottom
+
+```
+**Ralph Lauren Corp**
+<br>
+
+
+* 3. Most popular stock of 2017?
+
+
+```{r, warning = FALSE, message = FALSE, echo = FALSE}
+Popular_2018 <- SP_data %>%
+  group_by(Name)%>%
+  arrange(Name, volume) %>%
+  filter(Date >= "2017-01-01", Date <= "2017-12-31") %>%
+  mutate(Total_Volume = sum(as.numeric(volume))) %>%
+  arrange(desc(Total_Volume)) %>%
+  distinct(Name, Total_Volume) %>%
+  select(Name, Total_Volume)%>%
+  head(1)
+
+Popular_2018
+
+```
+**Bank of America Corp**
+<br>
+
+* 4 . Least popular stock of 2017?
+
+
+```{r, warning = FALSE, message = FALSE, echo = FALSE}
+Unpopular_2018 <- SP_data %>%
+  group_by(Name)%>%
+  arrange(Name, volume) %>%
+  filter(Date >= "2017-01-01", Date <= "2017-12-31") %>%
+  mutate(Total_Volume = sum(as.numeric(volume))) %>%
+  arrange(Total_Volume) %>%
+  distinct(Name, Total_Volume) %>%
+  select(Name, Total_Volume) %>%
+  head(1)
+
+Unpopular_2018
+```
+**Aptiv PLC**
+<br>
+
+
+# Hypothesis Test
+
+In order to answer the problem at hand a bit more precisely, we set up a little test. Did stocks in the energy sector rise in the summer of '17 due to the higher demand for power in order to cool down? Solely on the fact that it was hotter than other months did this affect the stock gains?
+
+```{r, warning = FALSE, message = FALSE, echo = FALSE}
+
+Summer <-SP_data %>%
+ filter(Name %in% c("EOG", "COP", "NEE", "XOM", "CVX")) %>% # Grouping data by Energy stock name
+ arrange(Name, Date) %>% # Reordering each stock from earliest date to present day
+ filter(Date >= "2017-07-01", Date <= "2017-08-31") %>% # Filtering data for only summer months
+ group_by(Name) %>% # Grouping data by stock name
+ filter(row_number()==n()) %>% # Showing only the last entry of each stock
+ mutate(mean_close = mean(close)) %>% # Finding mean of first and last entry close to find summer mean
+ arrange(desc(mean_close)) %>% # Reordering data by lowest gains  
+ select(Name, Date, mean_close) %>% # Selecting Name and gain columns only
+ head(10)
+
+Summer
+
+Spring <-SP_data %>%
+ filter(Name %in% c("EOG", "COP", "NEE", "XOM", "CVX")) %>% # Grouping data by Energy stock name
+# arrange(Name, Date) %>% # Reordering each stock from earliest date to present day
+ filter(Date >= "2017-03-01", Date <= "2017-04-30") %>% # Filtering data for only summer months
+ group_by(Name) %>% # Grouping data by stock name
+ filter(row_number()==n()) %>% # Showing only the last entry of each stock
+ mutate(mean_close = mean(close)) %>% # Finding mean of first and last entry close to find summer mean
+ arrange(desc(mean_close)) %>% # Reordering data by lowest gains  
+ select(Name, Date, mean_close) %>% # Selecting Name and gain columns only
+ head(10)
+
+Spring
 ```
 
+**Using T.Tests**
 
+```{r}
+summer <- data.frame(Name = c("NEE","CVX","EOG","XOM","COP"), Date = c("2017-04-28", "2017-04-28", "2017-04-28", "2017-04-28", "2017-04-28"), mean_close = c("133.56","106.70","92.50","81.65","47.91"))
 
-# Questions
+spring <- data.frame(Name = c("NEE","CVX","EOG","XOM","COP"), Date = c("2017-08-31", "2017-08-31", "2017-08-31", "2017-08-31", "2017-08-31"), mean_close = c("150.51","107.62","84.99","76.33","43.66")) 
+  
+#summer %>%
+#    summarise_each(funs(t.test(.[Name == "NEE"], .[Name == "NEE"])$p.value), vars = Date:meanclose)
+  
 
+```
 
-* 1. Which stock has the highest gains from 2013- 2018?
-
-* 2. Which has the lowest?
-
-* 3. Finding the p value with a t test and the null hypothesis.
-
-* 4. Finding a way to implement the stocks with a confidence interval.
-
-* 5. Compare the top companies.
-
-* 6. Events that affected the stock market from 2013 - 2018.
-
-* 7. Most popular stock?
-
-* 8. Least popular stock?
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Here, we tried to compare events that occur around the world from the years 2013 - 2018 and how they impacted stock prices. We also looked at how the market rises and falls with respect to itself, and if there is was sole, major driving power that determines a change for most of the stock exchange in the S & P 500 index. We began by first finding a reputable data set with the time frame we had in mind. Once found, on Kaggle.com, we loaded said data set and after a quick glimpse, we cleaned it up to be able to use for our needs. First, we went through each sector, organized by the top-performing stocks and compared their trajectories for the 5-year span. Then using a timeline from outside events happening around the world, we compared those to the timelines of the stocks. With little to go on, we then turned to find that successes within companies were contributing to noticeable changes. In conclusion, we found that for the most part, the stocks that make up the S&P 500 index rose and fell loosely between 2013-2018 depending on economic conditions surrounding the market. Most of these stocks showed dramatic change based on catalysts from within the respective companies. We can look at Nvidia for example, only due to their new graphics cards and timing were they so successful. On the other hand, the health care sector didn't even budge even after former President Obama signed the "Obamacare" health bill making health care mandatory. Also, as we looked throughout the different sectors, by comparing the top-performing stocks there was no true relation of each stock with each other. The stocks rose and fell independently with respect to each other. At the end of our analysis, we came to the end result that there is more than meets the eye to understanding how stocks move up and down on the totem pole. This Segways into one of the limitations of our findings. We feel that if there was more time given, as well as access to knowledge, we could use some sort of machine learning algorithm to figure out this phenomenon of the stock market.
 
 
 

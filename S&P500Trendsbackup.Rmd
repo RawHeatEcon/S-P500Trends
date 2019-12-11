@@ -1,0 +1,450 @@
+---
+title: "Final Project"
+author: "Rohit Kumar & Channing Vernon"
+date: "11/12/2019"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+require("knitr")
+opts_knit$set(root.dir = "C:/Users/William Roche/Documents/GitHub/Git2/S-P500Trends/sandp500")
+#Need to make this a relative path so anyone can load the dataset easily
+
+library(tidyverse)
+library(dplyr)
+#Loading all necessary libraries
+
+```
+
+# Installing required packages and Libraries
+
+```{r}
+library(tidyverse)
+library(dplyr)
+```
+
+
+
+<br>
+
+# Loading Data + Cleaning
+```{r}
+## Goals:
+# Cleaning up data, making it easier to read. 
+# **ALso need to filter out any NA's.**
+
+data <- read.csv("all_stocks_5yr.csv")
+
+summary(data)
+str(data)
+
+SP_data <- data %>%
+  select(Name,date,open,low,high,close, volume)
+# Changing the order of the columns
+
+```
+
+
+**Ommiting `NA` rows vs replacing them with `0`**
+```{r}
+SP_data <- na.omit(SP_data)
+#SP_data[is.na(SP_data)] <- 0
+
+# Omitting rows with NA values in order to make calculations error free, vs setting them to 0.
+
+summary(SP_data)
+```
+
+<br>
+# Changing date column from a factor to date
+```{r}
+# Making the "date" column usable.
+
+SP_data$Date <- as.Date(SP_data$date, format = "%Y-%m-%d")
+SP_data$date <- NULL
+# Changing the date column format into a new variable, and deleting the previous one
+
+summary(SP_data)
+
+```
+
+```{r, message = FALSE, include = TRUE, eval = FALSE}
+## Goals
+# Figuring out how to categorize the data into 500 indiviual companies, manually or via
+# automation/funtion.
+
+SP_data %>%
+  group_by(Name) %>%
+  select(Name) %>%
+  unique()
+#summary(SP_data)
+```
+
+
+#Top S&P 500 Stocks 
+
+* S&P500 Sectors
+- Information Technology
+- Health Care
+- Financials
+- Communications Services
+- Industrials
+- Consumer Staples
+- Energy
+- Utilities
+- Real Estate
+- Materials
+- 
+- 
+- 
+- 
+- 
+- 
+
+
+
+
+<br>
+**Information Technology - 19.9%**
+
+* CRM
+* MFST
+* CSCO
+* V
+* INTC
+
+`https://us.spindices.com/indices/equity/sp-500-information-technology-sector`
+
+
+
+
+```{r, message = FALSE, warning = FALSE}
+SP_InfoTech <- ggplot(SP_data %>% filter(Name %in% c("CRM", "MSFT", "CSCO", "V", "INTC")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Top InfoTech Stocks", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name)
+  
+SP_InfoTech
+```
+
+<br>
+
+**Health Care - 15.8%**
+
+* JNJ
+* UNH
+* MRK
+* ABT
+* LLY
+
+`https://us.spindices.com/indices/equity/sp-500-health-care-sector`
+
+
+
+```{r, message = FALSE, warning = FALSE}
+SP_HealthCare <- ggplot(SP_data %>% filter(Name %in% c("JNJ", "UNH", "MRK", "ABT", "LLY")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Top HealthCare Stocks", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name)
+  
+SP_HealthCare
+```
+
+<br>
+
+**Financials - 13.7%**
+
+* BRK.B
+* JPM
+* BAC
+* WFC
+* C
+
+`https://us.spindices.com/indices/equity/sp-500-financials-sector`
+
+```{r, message = FALSE, warning = FALSE}
+SP_Financials <- ggplot(SP_data %>% filter(Name %in% c("BRK.B", "JPM", "BAC", "WFC", "C")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Top Financials Stocks", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name)
+  
+SP_Financials
+```
+
+<br>
+
+**Consumer Discretionary - 9.9%**
+* AMZN
+* HD
+* MCD
+* NKE
+* SBUX
+
+`https://us.spindices.com/indices/equity/sp-500-consumer-discretionary-sector`
+
+
+```{r, message = FALSE, warning = FALSE}
+SP_ConsumerDisc <- ggplot(SP_data %>% filter(Name %in% c("HD", "MCD", "NKE", "SBUX")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Top Consumer Discretionary Stocks", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name)
+  
+SP_ConsumerDisc
+```
+
+```{r}
+"AMZN"
+```
+
+
+<br>
+
+**Communications Services - 9.9%**
+
+* Facebook
+* Alphabet Inc. Class A and Class C (GOOG & GOOGL)
+* Charter Communications Inc Class A
+* Walt Disney
+* NFLX, AT&T, Verizon, comcast, activision
+
+`https://us.spdrs.com/en/etf/the-communication-services-select-sector-spdr-fund-XLC`
+
+
+```{r, message = FALSE, warning = FALSE}
+SP_CommServices <- ggplot(SP_data %>% filter(Name %in% c("FB", "GOOGL", "CHTR", "DIS", "NFLX")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Top Communication Services Stocks", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name)
+  
+SP_CommServices
+```
+
+<br>
+
+**Industrials - 9.4%**
+
+* BA
+* HON
+* UNP
+* UTX
+* MMM, LMT, GE
+
+`https://us.spindices.com/indices/equity/sp-500-industrials-sector`
+
+
+```{r, message = FALSE, warning = FALSE}
+SP_Industrials <- ggplot(SP_data %>% filter(Name %in% c("BA", "HON", "UNP", "UTX", "MMM")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Top Industrials Stocks", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name)
+  
+SP_Industrials
+```
+
+
+```{r, message = FALSE, warning = FALSE}
+SP_ConsumerStaples <- ggplot(SP_data %>% filter(Name %in% c("PM", "PEP", "KO", "PG", "WMT")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Top Consumer Staples Stocks", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name)
+  
+SP_ConsumerStaples
+```
+
+<br>
+
+**Energy - 5.4%**
+
+* XOM
+* RDS.A (shell) *Not in the s&p 500 b/c it is not considered in the US market*
+* CVX
+* TOT
+* BP, PTR, NEE
+
+`https://www.fool.com/investing/the-10-biggest-energy-stocks.aspx`
+
+&
+
+`https://www.fool.com/investing/2018/09/06/the-5-biggest-oil-stocks-in-the-us.aspx`
+
+
+```{r, message = FALSE, warning = FALSE}
+SP_Energy <- ggplot(SP_data %>% filter(Name %in% c("EOG", "COP", "NEE", "XOM", "CVX")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Top Energy Stocks", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name)
+  
+SP_Energy
+```
+
+<br>
+
+**Utilities - 3.1%**
+
+* PPL
+* D
+* SO
+* DUK
+* CNNP, AES, EIX, FE, ED
+
+`https://www.barrons.com/articles/you-may-be-surprised-which-stock-market-sector-has-been-the-hottest-in-the-past-year-51570273500`
+
+
+```{r, message = FALSE, warning = FALSE}
+SP_Utilities <- ggplot(SP_data %>% filter(Name %in% c("PPL", "D", "DUK", "SO", "AES")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Top Utilities Stocks", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name)
+  
+SP_Utilities
+```
+
+<br>
+
+**Real Estate - 2.9%**
+
+* ENSG
+* ROIC
+* AMT
+* VNO
+* HST, CBRE, WELL, PLD, CCI
+
+`https://www.fool.com/investing/2019/01/13/the-3-best-real-estate-stocks-to-buy-in-2019.aspx`
+
+&
+
+`https://www.investopedia.com/top-real-estate-stocks-4582128`
+
+
+```{r, message = FALSE, warning = FALSE}
+SP_RealEstate <- ggplot(SP_data %>% filter(Name %in% c("CCI", "PLD", "AMT", "VNO", "MAC")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Top Real Estate Stocks", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name)
+  
+SP_RealEstate
+```
+
+<br>
+
+**Materials - 2.6%**
+
+* NUE
+* LYB
+* ALB
+* NEM
+* CF, FMC, 
+
+`https://www.investopedia.com/top-materials-stocks-4582152`
+
+```{r, message = FALSE, warning = FALSE}
+SP_Materials <- ggplot(SP_data %>% filter(Name %in% c("NUE", "LYB", "ALB", "NEM", "CF")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Top Materials Stocks", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name)
+  
+SP_Materials
+```
+
+<br>
+
+```{r, message = FALSE, warning = FALSE, error = FALSE}
+
+AMD_NVDA_INTC <- ggplot(filter(SP_data, Name %in% c("INTC", "AMD","NVDA")), aes(x = Date, y = close, color = Name)) + geom_point(alpha = 0, size = 1) + geom_smooth() + labs(title = "Intel vs AMD vs InVidia",
+                        subtitle = "2013 to 2018",
+                        y = "Date",
+                        x = "Closing price (USD)") + theme_dark()
+
+AMD_NVDA_INTC
+```
+
+
+
+<br>
+```{r, messages = FALSE, warnings = FALSE}
+AMD_NVDA_INTC_ <- ggplot(filter(SP_data, Name %in% c("INTC", "AMD","NVDA")), aes(x = Date, y = close, color = Name)) + geom_point() + labs(title = "Intel vs AMD vs InVidia",
+                        subtitle = "2013 to 2018",
+                        y = "Date",
+                        x = "Closing price (USD)") + theme_dark()
+
+AMD_NVDA_INTC_
+```
+# Questions
+
+
+* 1. Which stock has the highest gains from 2013 - 2018?
+
+```{r, warning=FALSE, message=FALSE}
+
+SP_data %>%
+ group_by(Name)%>%
+ arrange(Name, Date) %>%
+ filter(row_number()==1 | row_number()==n()) %>%
+ mutate(gains = c(0,diff(close))) %>%
+ filter(gains != "NULL" & gains!=0) %>%
+ select(Name)
+
+Start_Price <- SP_data %>%
+  group_by(Name) %>%
+  arrange(Name, Date) %>%
+  filter(row_number()==1) %>%
+  select(close)
+
+End_Price <- SP_data %>%
+  group_by(Name) %>%
+  arrange(Name, Date) %>%
+  filter(row_number()==n()) %>%
+  select(close)
+```
+
+
+* 2. Which has the lowest?
+
+* 3. Finding the p value with a t test and the null hypothesis.
+
+* 4. Finding a way to implement the stocks with a confidence interval.
+
+* 5. Compare the top companies.
+
+* 6. Events that affected the stock market from 2013 - 2018.
+
+* 7. Most popular stock?
+
+* 8. Least popular stock?
+
+* 9. T-test: Do energy stocks rise i nthe summer due to the fact that it is hotter than other months which would require more energy thus possibly raising energy stocks?
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
