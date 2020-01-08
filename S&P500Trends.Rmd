@@ -17,6 +17,7 @@ opts_knit$set(root.dir = "C:/Users/William Roche/Documents/GitHub/Git2/S-P500Tre
 
 library(tidyverse)
 library(dplyr)
+library(broom)
 # Loading all necessary libraries
 
 ```
@@ -36,8 +37,8 @@ To approach the problem we first use simple yet powerful graphing techniques to 
 ```{r}
 library(tidyverse)
 library(dplyr)
-
-## We first use the "tidyverse" package which contains a variety of packages that help us show data through graphs and plots using "ggplot" & "tibble". Also, we can manipulate data using powerful piping techniques to narrow down our queries via "dplyr". This also segways into the fact that we have also manually installed and loaded the "dplyr" package as a fail-safe.
+library(broom)
+## We first use the "tidyverse" package which contains a variety of packages that help us show data through graphs and plots using "ggplot" & "tibble". Also, we can manipulate data using powerful piping techniques to narrow down our queries via "dplyr". This also segways into the fact that we have also manually installed and loaded the "dplyr" package as a fail-safe. The broom package helps us run a t.test on our dataframe later on in the analysis.
 ```
 
 
@@ -132,7 +133,7 @@ The S&P 500 index is composed of 10 different sectors in different industries, w
 - Real Estate
 - Materials
 
-*We take a quick look at these sectors in more detail*
+*We take a quick look at these sectors in more detail, with percentage of sector from the S&P 500 written alongside*
 
 
 <br>
@@ -171,12 +172,19 @@ The top information technology stocks showed overall positive gains, with Salesf
 
 
 ```{r, message = FALSE, warning = FALSE, echo = FALSE}
-SP_HealthCare <- ggplot(SP_data %>% filter(Name %in% c("JNJ", "UNH", "MRK", "ABT", "LLY")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Top HealthCare Stocks", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name)
+
+H = data.frame(date=as.Date(c("2014-01-01", "2014-12-31")), event=c("Jan 2014", "Dec 2014"))
+
+# Creating a data frame to aid in labeling key dates
+
+SP_HealthCare <- ggplot(SP_data %>% filter(Name %in% c("JNJ", "UNH", "MRK", "ABT", "LLY")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Top HealthCare Stocks", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name) + geom_vline(data=H, mapping=aes(xintercept=date, color="Obamacare"), linetype="dashed", size=.65) + scale_color_manual(name = "Key Events", values = c(Obamacare = "red")) + geom_text(data=H, mapping=aes(x=date, y=0, label=event), size=2, angle=0, vjust = 0, hjust = -.1)
+
 # Plotting the top stocks into easily readable graphs side by side  
-SP_HealthCare
+
+SP_HealthCare 
 ```
 
-Although the top stocks in health care show near break-even gains, it is interesting to note UnitedHealth Group Inc's amazing performance. In 2014, former President Obama had signed to add $20 million in healthcare through his "Obamacare". However, by looking at the stocks, there seems to be little to no effect in the year 2014 to the outside influence of "Obamacare".
+Although the top stocks in health care show near break-even gains, it is interesting to note UnitedHealth Group Inc's amazing performance. In 2014, former President Obama had signed to add $20 million in healthcare through his "Obamacare". However, by looking at the stocks within the marked range, there seems to be little to no effect in the year 2014 to the outside influence of "Obamacare".
 
 
 
@@ -223,9 +231,17 @@ SP_ConsumerDisc
 After taking out Amazon (below) out of the picture, for solely blowing every other stock out. Amazon displays extremely explosive growth and continues to do so, which, when comparing to the other throws off the data tremendously. Home depot and Mcdonalds show decent gains, whereas Nike and Starbucks seem to struggle during these years. All in all, there doesn't seem to be a clear force driving all of these stocks up or down.
 
 ```{r, message = FALSE, warning = FALSE, echo = FALSE, echo = FALSE}
-Amazon <- ggplot(SP_data %>% filter(Name %in% c("AMZN")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Amazon", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)")
-# Plotting Amazon stock onto a graph  
+A = data.frame(date=as.Date(c("2014-08-25", "2015-06-23", "2017-06-16")), event=c("Aug 2014", "Jun 2015", "Jun 2017"))
+
+# Creating a data frame to aid in labeling key dates
+
+Amazon <- ggplot(SP_data %>% filter(Name %in% c("AMZN")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Amazon", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + geom_v
+
+SP_HealthCare <- ggplot(SP_data %>% filter(Name %in% c("JNJ", "UNH", "MRK", "ABT", "LLY")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Top HealthCare Stocks", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name) + geom_vline(data=H, mapping=aes(xintercept=date, color="Obamacare"), linetype="dashed", size=.65) + scale_color_manual(name = "Key Events", values = c(Obamacare = "red")) + geom_text(data=H, mapping=aes(x=date, y=0, label=event), size=2, angle=0, vjust = 0, hjust = -.1)
+
 Amazon
+
+# Plotting Amazon stock onto a graph  
 ```
 
 
@@ -250,7 +266,8 @@ SP_CommServices <- ggplot(SP_data %>% filter(Name %in% c("FB", "GOOGL", "CHTR", 
 SP_CommServices
 ```
 
-The above graphs show the dominance Google has over its competitors in the telecommunications sector of the S&P 500. With every other stock making minimal gains Google shows skyrocketing growth. This can especially be seen around mid-2015 where Google seems to just take off. Once again there doesn't seem to be any major influence from outside that runs synonymous with all the stocks.
+The above graphs show the dominance Google has over its competitors in the telecommunications sector of the S&P 500. With every other stock making minimal gains Google shows skyrocketing growth, out performing expected earnings. This can especially be seen around mid-2015 where Google seems to just take off. 
+[Source](https://www.fool.com/investing/general/2015/08/05/why-google-inc-stock-soared-22-in-july.aspx) Once again there doesn't seem to be any major influence from outside that runs synonymous with all the stocks.
 
 <br>
 
@@ -459,14 +476,13 @@ Bottom
 
 ```{r, warning = FALSE, message = FALSE, echo = FALSE}
 Popular_2018 <- SP_data %>%
-  group_by(Name)%>%
-  arrange(Name, volume) %>%
-  filter(Date >= "2017-01-01", Date <= "2017-12-31") %>%
-  mutate(Total_Volume = sum(as.numeric(volume))) %>%
-  arrange(desc(Total_Volume)) %>%
-  distinct(Name, Total_Volume) %>%
+  group_by(Name)%>% # grouping data by stock name
+  filter(Date >= "2017-01-01", Date <= "2017-12-31") %>% # filtering the data for dates within 2017
+  mutate(Total_Volume = sum(as.numeric(volume))) %>% # creating a new variable for the sum of the volume for 2017
+  arrange(desc(Total_Volume)) %>% # arranging table by highest total volume
+  distinct(Name, Total_Volume) %>% # Omitting out repeated rows
   select(Name, Total_Volume)%>%
-  head(1)
+  head(1) # returning top result
 
 Popular_2018
 
@@ -508,7 +524,7 @@ Summer <-SP_data %>%
  filter(row_number()==n()) %>% # Showing only the last entry of each stock
  mutate(mean_close = mean(close)) %>% # Finding mean of first and last entry close to find summer mean
  arrange(desc(mean_close)) %>% # Reordering data by lowest gains  
- select(Name, Date, mean_close) %>% # Selecting Name and gain columns only
+ select(Name, mean_close) %>% # Selecting Name and gain columns only
  head(10)
 
 Summer
@@ -521,30 +537,53 @@ Spring <-SP_data %>%
  filter(row_number()==n()) %>% # Showing only the last entry of each stock
  mutate(mean_close = mean(close)) %>% # Finding mean of first and last entry close to find summer mean
  arrange(desc(mean_close)) %>% # Reordering data by lowest gains  
- select(Name, Date, mean_close) %>% # Selecting Name and gain columns only
+ select(Name, mean_close) %>% # Selecting Name and gain columns only
  head(10)
 
 Spring
 ```
 
+By refrencing the two tables one can see there is a slight increase in the means of the stocks during the summer months.
+
 **Using T.Tests**
 
-```{r}
-summer <- data.frame(Name = c("NEE","CVX","EOG","XOM","COP"), Date = c("2017-04-28", "2017-04-28", "2017-04-28", "2017-04-28", "2017-04-28"), mean_close = c("133.56","106.70","92.50","81.65","47.91"))
+```{r, message = FALSE, warning = FALSE}
 
-spring <- data.frame(Name = c("NEE","CVX","EOG","XOM","COP"), Date = c("2017-08-31", "2017-08-31", "2017-08-31", "2017-08-31", "2017-08-31"), mean_close = c("150.51","107.62","84.99","76.33","43.66")) 
-  
-#summer %>%
-#    summarise_each(funs(t.test(.[Name == "NEE"], .[Name == "NEE"])$p.value), vars = Date:meanclose)
-  
+summer <- data.frame(Name = c("NEE","CVX","EOG","XOM","COP"), Date = c("2017-04-28", "2017-04-28", "2017-04-28", "2017-04-28", "2017-04-28"), mean_close = c("133.56","106.70","92.50","81.65","47.91"), stringsAsFactors=FALSE)
 
+spring <- data.frame(Name = c("NEE","CVX","EOG","XOM","COP"), Date = c("2017-08-31", "2017-08-31", "2017-08-31", "2017-08-31", "2017-08-31"), mean_close = c("150.51","107.62","84.99","76.33","43.66"), stringsAsFactors=FALSE) 
+
+
+# creating dataframes for both the control and experimental groups of data
 ```
 
+```{r, message = FALSE, warning = FALSE, eval = FALSE}
+
+summertest <- summer %>% 
+  group_by(Name) %>% 
+  do(tidy(t.test(.$mean_close, 
+                 mu = 0, 
+                 alt = "less", 
+                 paired = FALSE, 
+                 conf.level = 0.99)))
+
+springtest <- spring %>% 
+  group_by(Name) %>% 
+  do(tidy(t.test(.$mean_close, 
+                 mu = 0, 
+                 alt = "less", 
+                 paired = FALSE, 
+                 conf.level = 0.99)))
+
+# running the t.tests
+```
+*The T-test above would be useful only if there were 5 more stocks from the sector in order to evaluate the t.test.(The test needs at least 10 rows in order to execute the t.test)* 
+
+
+
+# Final Assessment 
+
 Here, we tried to compare events that occur around the world from the years 2013 - 2018 and how they impacted stock prices. We also looked at how the market rises and falls with respect to itself, and if there is was sole, major driving power that determines a change for most of the stock exchange in the S & P 500 index. We began by first finding a reputable data set with the time frame we had in mind. Once found, on Kaggle.com, we loaded said data set and after a quick glimpse, we cleaned it up to be able to use for our needs. First, we went through each sector, organized by the top-performing stocks and compared their trajectories for the 5-year span. Then using a timeline from outside events happening around the world, we compared those to the timelines of the stocks. With little to go on, we then turned to find that successes within companies were contributing to noticeable changes. In conclusion, we found that for the most part, the stocks that make up the S&P 500 index rose and fell loosely between 2013-2018 depending on economic conditions surrounding the market. Most of these stocks showed dramatic change based on catalysts from within the respective companies. We can look at Nvidia for example, only due to their new graphics cards and timing were they so successful. On the other hand, the health care sector didn't even budge even after former President Obama signed the "Obamacare" health bill making health care mandatory. Also, as we looked throughout the different sectors, by comparing the top-performing stocks there was no true relation of each stock with each other. The stocks rose and fell independently with respect to each other. At the end of our analysis, we came to the end result that there is more than meets the eye to understanding how stocks move up and down on the totem pole. This Segways into one of the limitations of our findings. We feel that if there was more time given, as well as access to knowledge, we could use some sort of machine learning algorithm to figure out this phenomenon of the stock market.
-
-
-
-
 
 
 

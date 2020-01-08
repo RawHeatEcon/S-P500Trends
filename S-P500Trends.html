@@ -381,8 +381,8 @@ summary {
 <h1>Installing packages required</h1>
 <pre class="r"><code>library(tidyverse)
 library(dplyr)
-
-## We first use the &quot;tidyverse&quot; package which contains a variety of packages that help us show data through graphs and plots using &quot;ggplot&quot; &amp; &quot;tibble&quot;. Also, we can manipulate data using powerful piping techniques to narrow down our queries via &quot;dplyr&quot;. This also segways into the fact that we have also manually installed and loaded the &quot;dplyr&quot; package as a fail-safe.</code></pre>
+library(broom)
+## We first use the &quot;tidyverse&quot; package which contains a variety of packages that help us show data through graphs and plots using &quot;ggplot&quot; &amp; &quot;tibble&quot;. Also, we can manipulate data using powerful piping techniques to narrow down our queries via &quot;dplyr&quot;. This also segways into the fact that we have also manually installed and loaded the &quot;dplyr&quot; package as a fail-safe. The broom package helps us run a t.test on our dataframe later on in the analysis.</code></pre>
 <p><br></p>
 </div>
 <div id="loading-data-cleaning" class="section level1">
@@ -675,31 +675,53 @@ SP_data %&gt;%
 <div id="hypothesis-test" class="section level1">
 <h1>Hypothesis Test</h1>
 <p>In order to answer the problem at hand a bit more precisely, we set up a little test. Did stocks in the energy sector rise in the summer of ’17 due to the higher demand for power in order to cool down? Solely on the fact that it was hotter than other months did this affect the stock gains?</p>
-<pre><code>## # A tibble: 5 x 3
+<pre><code>## # A tibble: 5 x 2
 ## # Groups:   Name [5]
-##   Name  Date       mean_close
-##   &lt;fct&gt; &lt;date&gt;          &lt;dbl&gt;
-## 1 NEE   2017-08-31      151. 
-## 2 CVX   2017-08-31      108. 
-## 3 EOG   2017-08-31       85.0
-## 4 XOM   2017-08-31       76.3
-## 5 COP   2017-08-31       43.7</code></pre>
-<pre><code>## # A tibble: 5 x 3
+##   Name  mean_close
+##   &lt;fct&gt;      &lt;dbl&gt;
+## 1 NEE        151. 
+## 2 CVX        108. 
+## 3 EOG         85.0
+## 4 XOM         76.3
+## 5 COP         43.7</code></pre>
+<pre><code>## # A tibble: 5 x 2
 ## # Groups:   Name [5]
-##   Name  Date       mean_close
-##   &lt;fct&gt; &lt;date&gt;          &lt;dbl&gt;
-## 1 NEE   2017-04-28      134. 
-## 2 CVX   2017-04-28      107. 
-## 3 EOG   2017-04-28       92.5
-## 4 XOM   2017-04-28       81.6
-## 5 COP   2017-04-28       47.9</code></pre>
+##   Name  mean_close
+##   &lt;fct&gt;      &lt;dbl&gt;
+## 1 NEE        134. 
+## 2 CVX        107. 
+## 3 EOG         92.5
+## 4 XOM         81.6
+## 5 COP         47.9</code></pre>
+<p>By refrencing the two tables one can see there is a slight increase in the means of the stocks during the summer months.</p>
 <p><strong>Using T.Tests</strong></p>
-<pre class="r"><code>summer &lt;- data.frame(Name = c(&quot;NEE&quot;,&quot;CVX&quot;,&quot;EOG&quot;,&quot;XOM&quot;,&quot;COP&quot;), Date = c(&quot;2017-04-28&quot;, &quot;2017-04-28&quot;, &quot;2017-04-28&quot;, &quot;2017-04-28&quot;, &quot;2017-04-28&quot;), mean_close = c(&quot;133.56&quot;,&quot;106.70&quot;,&quot;92.50&quot;,&quot;81.65&quot;,&quot;47.91&quot;))
+<pre class="r"><code>summer &lt;- data.frame(Name = c(&quot;NEE&quot;,&quot;CVX&quot;,&quot;EOG&quot;,&quot;XOM&quot;,&quot;COP&quot;), Date = c(&quot;2017-04-28&quot;, &quot;2017-04-28&quot;, &quot;2017-04-28&quot;, &quot;2017-04-28&quot;, &quot;2017-04-28&quot;), mean_close = c(&quot;133.56&quot;,&quot;106.70&quot;,&quot;92.50&quot;,&quot;81.65&quot;,&quot;47.91&quot;), stringsAsFactors=FALSE)
 
-spring &lt;- data.frame(Name = c(&quot;NEE&quot;,&quot;CVX&quot;,&quot;EOG&quot;,&quot;XOM&quot;,&quot;COP&quot;), Date = c(&quot;2017-08-31&quot;, &quot;2017-08-31&quot;, &quot;2017-08-31&quot;, &quot;2017-08-31&quot;, &quot;2017-08-31&quot;), mean_close = c(&quot;150.51&quot;,&quot;107.62&quot;,&quot;84.99&quot;,&quot;76.33&quot;,&quot;43.66&quot;)) 
-  
-#summer %&gt;%
-#    summarise_each(funs(t.test(.[Name == &quot;NEE&quot;], .[Name == &quot;NEE&quot;])$p.value), vars = Date:meanclose)</code></pre>
+spring &lt;- data.frame(Name = c(&quot;NEE&quot;,&quot;CVX&quot;,&quot;EOG&quot;,&quot;XOM&quot;,&quot;COP&quot;), Date = c(&quot;2017-08-31&quot;, &quot;2017-08-31&quot;, &quot;2017-08-31&quot;, &quot;2017-08-31&quot;, &quot;2017-08-31&quot;), mean_close = c(&quot;150.51&quot;,&quot;107.62&quot;,&quot;84.99&quot;,&quot;76.33&quot;,&quot;43.66&quot;), stringsAsFactors=FALSE) 
+
+
+# creating dataframes for both the control and experimental groups of data</code></pre>
+<pre class="r"><code>summertest &lt;- summer %&gt;% 
+  group_by(Name) %&gt;% 
+  do(tidy(t.test(.$mean_close, 
+                 mu = 0, 
+                 alt = &quot;less&quot;, 
+                 paired = FALSE, 
+                 conf.level = 0.99)))
+
+springtest &lt;- spring %&gt;% 
+  group_by(Name) %&gt;% 
+  do(tidy(t.test(.$mean_close, 
+                 mu = 0, 
+                 alt = &quot;less&quot;, 
+                 paired = FALSE, 
+                 conf.level = 0.99)))
+
+# running the t.tests</code></pre>
+<p><em>The T-test above would be useful only if there were 5 more stocks from the sector in order to evaluate the t.test.(The test needs at least 10 rows in order to execute the t.test)</em></p>
+</div>
+<div id="final-assessment" class="section level1">
+<h1>Final Assessment</h1>
 <p>Here, we tried to compare events that occur around the world from the years 2013 - 2018 and how they impacted stock prices. We also looked at how the market rises and falls with respect to itself, and if there is was sole, major driving power that determines a change for most of the stock exchange in the S &amp; P 500 index. We began by first finding a reputable data set with the time frame we had in mind. Once found, on Kaggle.com, we loaded said data set and after a quick glimpse, we cleaned it up to be able to use for our needs. First, we went through each sector, organized by the top-performing stocks and compared their trajectories for the 5-year span. Then using a timeline from outside events happening around the world, we compared those to the timelines of the stocks. With little to go on, we then turned to find that successes within companies were contributing to noticeable changes. In conclusion, we found that for the most part, the stocks that make up the S&amp;P 500 index rose and fell loosely between 2013-2018 depending on economic conditions surrounding the market. Most of these stocks showed dramatic change based on catalysts from within the respective companies. We can look at Nvidia for example, only due to their new graphics cards and timing were they so successful. On the other hand, the health care sector didn’t even budge even after former President Obama signed the “Obamacare” health bill making health care mandatory. Also, as we looked throughout the different sectors, by comparing the top-performing stocks there was no true relation of each stock with each other. The stocks rose and fell independently with respect to each other. At the end of our analysis, we came to the end result that there is more than meets the eye to understanding how stocks move up and down on the totem pole. This Segways into one of the limitations of our findings. We feel that if there was more time given, as well as access to knowledge, we could use some sort of machine learning algorithm to figure out this phenomenon of the stock market.</p>
 </div>
 
