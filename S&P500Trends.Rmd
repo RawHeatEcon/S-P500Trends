@@ -177,7 +177,7 @@ H = data.frame(date=as.Date(c("2014-01-01", "2014-12-31")), event=c("Jan 2014", 
 
 # Creating a data frame to aid in labeling key dates
 
-SP_HealthCare <- ggplot(SP_data %>% filter(Name %in% c("JNJ", "UNH", "MRK", "ABT", "LLY")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Top HealthCare Stocks", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name) + geom_vline(data=H, mapping=aes(xintercept=date, color="Obamacare"), linetype="dashed", size=.65) + scale_color_manual(name = "Key Events", values = c(Obamacare = "red")) + geom_text(data=H, mapping=aes(x=date, y=0, label=event), size=2, angle=0, vjust = 0, hjust = -.1)
+SP_HealthCare <- ggplot(SP_data %>% filter(Name %in% c("JNJ", "UNH", "MRK", "ABT", "LLY")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Top HealthCare Stocks", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name) + geom_vline(data=H, mapping=aes(xintercept=date, color="Obamacare"), linetype="dashed", size=.65) + scale_color_manual(name = "Key Events", values = c(Obamacare = "red")) + geom_text(data=H, mapping=aes(x=date, y=0, label=event), size=2, angle=0, vjust = 0, hjust = -.1) + theme(legend.position="bottom")
 
 # Plotting the top stocks into easily readable graphs side by side  
 
@@ -231,17 +231,21 @@ SP_ConsumerDisc
 After taking out Amazon (below) out of the picture, for solely blowing every other stock out. Amazon displays extremely explosive growth and continues to do so, which, when comparing to the other throws off the data tremendously. Home depot and Mcdonalds show decent gains, whereas Nike and Starbucks seem to struggle during these years. All in all, there doesn't seem to be a clear force driving all of these stocks up or down.
 
 ```{r, message = FALSE, warning = FALSE, echo = FALSE, echo = FALSE}
-A = data.frame(date=as.Date(c("2014-08-25", "2015-06-23", "2017-06-16")), event=c("Aug 2014", "Jun 2015", "Jun 2017"))
+A1 = data.frame(date=as.Date(c("2014-08-25")), event=c("Aug 2014"))
 
-# Creating a data frame to aid in labeling key dates
+A2 = data.frame(date=as.Date(c("2015-06-23")), event=c("Jun 2015"))
 
-Amazon <- ggplot(SP_data %>% filter(Name %in% c("AMZN")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Amazon", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + geom_v
+A3 = data.frame(date=as.Date(c("2017-06-16")), event=c("Jun 2017"))
 
-SP_HealthCare <- ggplot(SP_data %>% filter(Name %in% c("JNJ", "UNH", "MRK", "ABT", "LLY")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Top HealthCare Stocks", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name) + geom_vline(data=H, mapping=aes(xintercept=date, color="Obamacare"), linetype="dashed", size=.65) + scale_color_manual(name = "Key Events", values = c(Obamacare = "red")) + geom_text(data=H, mapping=aes(x=date, y=0, label=event), size=2, angle=0, vjust = 0, hjust = -.1)
+A4 = data.frame(date=as.Date(c("2013-08-05")), event=c("Aug 2013"))
+
+# Creating data frames to aid in labeling key dates
+
+Amazon <- ggplot(SP_data %>% filter(Name %in% c("AMZN")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Amazon", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + geom_vline(data=A1, mapping=aes(xintercept=date, color="Twitch Acquisition"), linetype="dashed", size=.65) + geom_vline(data=A2, mapping=aes(xintercept=date, color="Amazon Echo Release"), linetype="dashed", size=.65) + geom_vline(data=A3, mapping=aes(xintercept=date, color="Whole Foods Acquisition"), linetype="dashed", size=.65) + geom_vline(data=A4, mapping=aes(xintercept=date, color="Washington Post Acquisition"), linetype="dashed", size=.65) + scale_color_manual(name = "Key Events", values = c("Twitch Acquisition" = "purple", "Amazon Echo Release" = "royalblue2", "Whole Foods Acquisition" = "darkgreen", "Washington Post Acquisition" = "black" )) + geom_text(data=A1, mapping=aes(x=date, y=0, label=event), size=2, angle=0, vjust = 0, hjust = -.1) + geom_text(data=A2, mapping=aes(x=date, y=0, label=event), size=2, angle=0, vjust = 0, hjust = -.1) + geom_text(data=A3, mapping=aes(x=date, y=0, label=event), size=2, angle=0, vjust = 0, hjust = -.1) + geom_text(data=A4, mapping=aes(x=date, y=0, label=event), size=2, angle=0, vjust = 0, hjust = -.1)
 
 Amazon
 
-# Plotting Amazon stock onto a graph  
+# Plotting Amazon stock onto a graph, with key dates noted  
 ```
 
 
@@ -305,8 +309,16 @@ Once again, we can see that most of the stocks at the top of the industrials sec
 
 
 ```{r, message = FALSE, warning = FALSE, echo = FALSE}
-SP_ConsumerStaples <- ggplot(SP_data %>% filter(Name %in% c("PM", "PEP", "KO", "PG", "WMT")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Top Consumer Staples Stocks", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name)
+C1 = data.frame(date=as.Date(c("2015-11-01")), event=c("Nov 2015"))
+
+C2 = data.frame(date=as.Date(c("2016-04-01")), event=c("Apr 2016"))
+
+# Creating data frames to aid in labeling key dates
+
+SP_ConsumerStaples <- ggplot(SP_data %>% filter(Name %in% c("PM", "PEP", "KO", "PG", "WMT")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Top Consumer Staples Stocks", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name) + geom_vline(data=C1, mapping=aes(xintercept=date), color="red", linetype="dashed", size=.65) + geom_vline(data=C2, mapping=aes(xintercept=date), color="red", linetype="dashed", size=.65)+ geom_text(data=C1, mapping=aes(x=date, y=0, label=event), size=2, angle=0, vjust = 0, hjust = 1.1) + geom_text(data=C2, mapping=aes(x=date, y=0, label=event), size=2, angle=0, vjust = -1, hjust = -.1) 
+
 # Plotting the top stocks into easily readable graphs side by side  
+
 SP_ConsumerStaples
 ```
 
@@ -351,12 +363,20 @@ Here we can see the energy sector acts quite erratically. Most of these top comp
 
 
 ```{r, message = FALSE, warning = FALSE, echo = FALSE}
-SP_Utilities <- ggplot(SP_data %>% filter(Name %in% c("PPL", "D", "DUK", "SO", "AES")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Top Utilities Stocks", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name)
+U1 = data.frame(date=as.Date(c("2017-08-25")), event=c("Aug 2017"))
+
+U2 = data.frame(date=as.Date(c("2016-02-04")), event=c("Feb 2016"))
+
+# Creating data frames to aid in labeling key dates
+
+SP_Utilities <- ggplot(SP_data %>% filter(Name %in% c("PPL", "D", "DUK", "SO", "AES")), aes(x = Date, y = close)) + geom_point(alpha = (1/6), size = 2) + geom_smooth(lwd = 1, se = TRUE) + labs(title = "Top Utilities Stocks", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)") + facet_wrap(~Name) + geom_vline(data=U1, mapping=aes(xintercept=date, color="Hurricane Harvey"), linetype="dashed", size=.65) + geom_vline(data=U2, mapping=aes(xintercept=date, color="Trans-Pacific Partnership"), linetype="dashed", size=.65) + scale_color_manual(name = "Key Events", values = c("Hurricane Harvey" = "red", "Trans-Pacific Partnership" = "blue")) + geom_text(data=U1, mapping=aes(x=date, y=0, label=event), size=2, angle=0, vjust = 0, hjust = 1.1) + geom_text(data=U2, mapping=aes(x=date, y=0, label=event), size=2, angle=0, vjust = 0, hjust = 1.1) + theme(legend.position="bottom")
+
 # Plotting the top stocks into easily readable graphs side by side  
+
 SP_Utilities
 ```
 
-Surprisingly, utilities stocks seem unfazed from anything happening around them. They show minimal but positive growth amidst many world events happening all the time. From hurricane Harvey in August of 2017 to the Trans-Pacific partnership in February of 2015, not much can sway these stocks from their course.
+Surprisingly, utilities stocks seem unfazed from anything happening around them. They show minimal but positive growth amidst many world events happening all the time. From hurricane Harvey in August of 2017 to the Trans-Pacific partnership in February of 2016, not much can sway these stocks from their course.
 
 <br>
 
@@ -381,11 +401,13 @@ SP_RealEstate <- ggplot(SP_data %>% filter(Name %in% c("CCI", "PLD", "AMT", "VNO
 SP_RealEstate
 ```
 
-With interest rates on the rise, as seen below, we can see somewhat of an increase in gains, but there are till stocks that are lagging behind and even going negative. Once, again we cannot say for certain how these outside events are impacting the course of the market.
+With interest rates on the rise, as seen below, we can see somewhat of an increase in gains, but there are still stocks that are lagging behind and even going negative. Once, again we cannot say for certain how these outside events are impacting the course of the market. We can look at the historical interest rates from 2013-2018 as a reference and compare them to how the stocks reacted throughout this time period.
 
+<br>
 
-![Alt text](C:/Users/William Roche/Downloads/fed-funds-rate-historical-chart-2019-12-10-macrotrends.png)
-<a href='https://www.macrotrends.net/2015/fed-funds-rate-historical-chart'>Macrotrends</a>
+<center> **Historical Interest rates 2013-2018** </center>
+![Alt text](C:/Users/William Roche/Documents/GitHub/Git2/S-P500Trends/sandp500/fed-funds-rate-historical-chart-2020-01-08-macrotrends (1).png)
+<a href='https://www.macrotrends.net/2015/fed-funds-rate-historical-chart'>Source</a>
 <br>
 
 **Materials - 2.6%**
@@ -409,11 +431,13 @@ Here, the top materials stocks shown the same sort of trends as seen previously,
 <br>
 
 ```{r, message = FALSE, warning = FALSE, error = FALSE, echo = FALSE}
-
-AMD_NVDA_INTC <- ggplot(filter(SP_data, Name %in% c("INTC", "AMD","NVDA")), aes(x = Date, y = close, color = Name)) + geom_point(alpha = 0, size = 1) + geom_smooth() + labs(title = "Intel vs AMD vs InVidia",
-                        subtitle = "2013 to 2018",
-                        y = "Date",
-                        x = "Closing price (USD)") + theme_dark()
+I1 = data.frame(date=as.Date(c("2015-10-01")), event=c("Oct 2015"))
+I2 = data.frame(date=as.Date(c("2016-05-27")), event=c("May 2016"))
+I3 = data.frame(date=as.Date(c("2016-04-05")), event=c("Apr 2016"))
+I4 = data.frame(date=as.Date(c("2017-09-01")), event=c("Sep 2017"))
+I5 = data.frame(date=as.Date(c("2017-08-01")), event=c("Aug 2017"))
+# Creating data frames to aid in labeling key dates
+AMD_NVDA_INTC <- ggplot(filter(SP_data, Name %in% c("INTC", "AMD","NVDA")), aes(x = Date, y = close, color = Name)) + geom_point(alpha = 0, size = 1) + geom_smooth() + labs(title = "Intel vs AMD vs InVidia", subtitle = "2013 to 2018", y = "Date", x = "Closing price (USD)")+ geom_vline(data=I1, mapping=aes(xintercept=date, color=": League of Legends viewership breaks records"), linetype="dashed", size=.65) + geom_vline(data=I2, mapping=aes(xintercept=date, color=": Geforce GTX 1080 released"), linetype="dashed", size=.65) + geom_vline(data=I3, mapping=aes(xintercept=date, color=": Pascal line of GPU's release"), linetype="dashed", size=.65) + geom_vline(data=I4, mapping=aes(xintercept=date, color=": Fortnite release"), linetype="dashed", size=.65) + geom_vline(data=I5, mapping=aes(xintercept=date, color=": Bitcoin Mining Boom"), linetype="dashed", size=.65) + scale_color_manual(name = "Key Events and Stocks", values = c(": League of Legends viewership breaks records" = "purple", ": Geforce GTX 1080 released" = "turquoise2", ": Pascal line of GPU's release" = "black", ": Fortnite release" = "orange" , ": Bitcoin Mining Boom" = "green2", "INTC" = "limegreen" , "AMD" = "coral2", "NVDA" = "dodgerblue1" )) + theme(legend.position = c(0.25, 0.6))+ theme(legend.background = element_rect(fill="white", size=0.5, linetype="solid"))  
 
 AMD_NVDA_INTC
 ```
