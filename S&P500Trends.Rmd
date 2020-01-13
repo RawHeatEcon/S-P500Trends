@@ -537,11 +537,11 @@ Unpopular_2018
 # Hypothesis Test
 
 In order to answer the problem at hand a bit more precisely, we set up a little test. Did stocks in the energy sector rise in the summer of '17 due to the higher demand for power in order to cool down? Solely on the fact that it was hotter than other months did this affect the stock gains?
-
+92.464 summ 92.622 sprin
 ```{r, warning = FALSE, message = FALSE, echo = FALSE}
 
 Summer <-SP_data %>%
- filter(Name %in% c("EOG", "COP", "NEE", "XOM", "CVX")) %>% # Grouping data by Energy stock name
+ filter(Name %in% c("EOG", "COP", "NEE", "XOM", "CVX", "APA", "DVN", "XEC", "CXO", "COG", "EOG", "XOM", "HAL", "HES", "KMI")) %>% # Grouping data by Energy stock name
  arrange(Name, Date) %>% # Reordering each stock from earliest date to present day
  filter(Date >= "2017-07-01", Date <= "2017-08-31") %>% # Filtering data for only summer months
  group_by(Name) %>% # Grouping data by stock name
@@ -549,12 +549,12 @@ Summer <-SP_data %>%
  mutate(mean_close = mean(close)) %>% # Finding mean of first and last entry close to find summer mean
  arrange(desc(mean_close)) %>% # Reordering data by lowest gains  
  select(Name, mean_close) %>% # Selecting Name and gain columns only
- head(10)
+ head(15)
 
 Summer
 
 Spring <-SP_data %>%
- filter(Name %in% c("EOG", "COP", "NEE", "XOM", "CVX")) %>% # Grouping data by Energy stock name
+ filter(Name %in% c("EOG", "COP", "NEE", "XOM", "CVX", "APA", "DVN", "XEC", "CXO", "COG", "EOG", "XOM", "HAL", "HES", "KMI")) %>% # Grouping data by Energy stock name
 # arrange(Name, Date) %>% # Reordering each stock from earliest date to present day
  filter(Date >= "2017-03-01", Date <= "2017-04-30") %>% # Filtering data for only summer months
  group_by(Name) %>% # Grouping data by stock name
@@ -562,21 +562,23 @@ Spring <-SP_data %>%
  mutate(mean_close = mean(close)) %>% # Finding mean of first and last entry close to find summer mean
  arrange(desc(mean_close)) %>% # Reordering data by lowest gains  
  select(Name, mean_close) %>% # Selecting Name and gain columns only
- head(10)
+ head(15)
 
 Spring
 ```
 
 By refrencing the two tables one can see there is a slight increase in the means of the stocks during the summer months.
-
+sp71.7207692, su66.6738462
 **Using T.Tests**
 
 ```{r, message = FALSE, warning = FALSE}
 
-summer <- data.frame(Name = c("NEE","CVX","EOG","XOM","COP"), Date = c("2017-04-28", "2017-04-28", "2017-04-28", "2017-04-28", "2017-04-28"), mean_close = c("133.56","106.70","92.50","81.65","47.91"), stringsAsFactors=FALSE)
+spring <- data.frame(mean_close = c("133.56","126.66","116.68","106.70","92.50","81.65","48.83","48.64","47.91","45.88","39.49","23.24","20.63"), stringsAsFactors=FALSE)
 
-spring <- data.frame(Name = c("NEE","CVX","EOG","XOM","COP"), Date = c("2017-08-31", "2017-08-31", "2017-08-31", "2017-08-31", "2017-08-31"), mean_close = c("150.51","107.62","84.99","76.33","43.66"), stringsAsFactors=FALSE) 
+summer <- data.frame(mean_close = c("150.51","110.97","107.62","99.69","84.99","76.33","43.66","38.97","38.90","38.84","31.40","25.55","19.33"), stringsAsFactors=FALSE) 
 
+
+head(spring)
 
 # creating dataframes for both the control and experimental groups of data
 ```
@@ -584,20 +586,16 @@ spring <- data.frame(Name = c("NEE","CVX","EOG","XOM","COP"), Date = c("2017-08-
 ```{r, message = FALSE, warning = FALSE, eval = FALSE}
 
 summertest <- summer %>% 
-  group_by(Name) %>% 
   do(tidy(t.test(.$mean_close, 
-                 mu = 0, 
-                 alt = "less", 
+                 mu = 71.7208, 
+                 alt = "greater", 
                  paired = FALSE, 
                  conf.level = 0.99)))
 
-springtest <- spring %>% 
-  group_by(Name) %>% 
-  do(tidy(t.test(.$mean_close, 
-                 mu = 0, 
-                 alt = "less", 
-                 paired = FALSE, 
-                 conf.level = 0.99)))
+ t.test(x, y = NULL, alternative = c("two.sided", "less", "greater"), mu = 0, 
+        paired = FALSE, var.equal = FALSE, conf.level = 0.95)
+
+
 
 # running the t.tests
 ```
