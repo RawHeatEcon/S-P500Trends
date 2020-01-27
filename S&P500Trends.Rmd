@@ -573,12 +573,22 @@ sp71.7207692, su66.6738462
 
 ```{r, message = FALSE, warning = FALSE}
 
-spring <- data.frame(mean_close = c("133.56","126.66","116.68","106.70","92.50","81.65","48.83","48.64","47.91","45.88","39.49","23.24","20.63"), stringsAsFactors=FALSE)
+spring <- data.frame(stock = c("EOG", "COP", "NEE", "XOM", "CVX", "APA", "DVN", "XEC", "CXO", "COG", "HAL", "HES", "KMI"), mean_close = c("133.56","126.66","116.68","106.70","92.50","81.65","48.83","48.64","47.91","45.88","39.49","23.24","20.63"), stringsAsFactors=FALSE)
 
-summer <- data.frame(mean_close = c("150.51","110.97","107.62","99.69","84.99","76.33","43.66","38.97","38.90","38.84","31.40","25.55","19.33"), stringsAsFactors=FALSE) 
+summer <- data.frame(stock = c("EOG", "COP", "NEE", "XOM", "CVX", "APA", "DVN", "XEC", "CXO", "COG", "HAL", "HES", "KMI"), mean_close = c("150.51","110.97","107.62","99.69","84.99","76.33","43.66","38.97","38.90","38.84","31.40","25.55","19.33"), stringsAsFactors=FALSE) 
+
+#head(spring)
 
 
-head(spring)
+#summertest <- summer %>% 
+#  do(tidy(t.test(summer$mean_close, 
+#                mu = 71.7208, 
+#                 alt = "greater", 
+#                 paired = FALSE, 
+#                 conf.level = 0.95)))
+
+t.test(summer$mean_close, mu = 71.7208, alt = "greater", paired = FALSE, conf.level = 0.95)
+
 
 # creating dataframes for both the control and experimental groups of data
 ```
@@ -590,12 +600,7 @@ summertest <- summer %>%
                  mu = 71.7208, 
                  alt = "greater", 
                  paired = FALSE, 
-                 conf.level = 0.99)))
-
- t.test(x, y = NULL, alternative = c("two.sided", "less", "greater"), mu = 0, 
-        paired = FALSE, var.equal = FALSE, conf.level = 0.95)
-
-
+                 conf.level = 0.95)))
 
 # running the t.tests
 ```
@@ -606,6 +611,31 @@ summertest <- summer %>%
 # Final Assessment 
 
 Here, we tried to compare events that occur around the world from the years 2013 - 2018 and how they impacted stock prices. We also looked at how the market rises and falls with respect to itself, and if there is was sole, major driving power that determines a change for most of the stock exchange in the S & P 500 index. We began by first finding a reputable data set with the time frame we had in mind. Once found, on Kaggle.com, we loaded said data set and after a quick glimpse, we cleaned it up to be able to use for our needs. First, we went through each sector, organized by the top-performing stocks and compared their trajectories for the 5-year span. Then using a timeline from outside events happening around the world, we compared those to the timelines of the stocks. With little to go on, we then turned to find that successes within companies were contributing to noticeable changes. In conclusion, we found that for the most part, the stocks that make up the S&P 500 index rose and fell loosely between 2013-2018 depending on economic conditions surrounding the market. Most of these stocks showed dramatic change based on catalysts from within the respective companies. We can look at Nvidia for example, only due to their new graphics cards and timing were they so successful. On the other hand, the health care sector didn't even budge even after former President Obama signed the "Obamacare" health bill making health care mandatory. Also, as we looked throughout the different sectors, by comparing the top-performing stocks there was no true relation of each stock with each other. The stocks rose and fell independently with respect to each other. At the end of our analysis, we came to the end result that there is more than meets the eye to understanding how stocks move up and down on the totem pole. This Segways into one of the limitations of our findings. We feel that if there was more time given, as well as access to knowledge, we could use some sort of machine learning algorithm to figure out this phenomenon of the stock market.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
