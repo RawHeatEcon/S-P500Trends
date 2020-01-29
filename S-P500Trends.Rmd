@@ -3,8 +3,8 @@ title: "A glimpse into the ups & downs of the S&P 500"
 author: "Rohit Kumar & Channing Vernon"
 date: "11/12/2019"
 output:
-  pdf_document: default
   html_document: default
+  pdf_document: default
 ---
 
 > <u>**Introduction**</u>
